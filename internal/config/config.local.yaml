@@ -1,0 +1,28 @@
+app:
+  debug: true
+
+http:
+  host: 127.0.0.1
+  port: 8080
+  cors:
+    debug: true
+    allowed-methods: [ "GET", "POST", "PATCH", "PUT", "OPTIONS", "DELETE" ]
+    allowed-origins:
+      - "http://localhost:3000"
+    allow-credentials: true
+    allowed-headers:
+      - "Authorization"
+      - "Location"
+      - "Charset"
+      - "Access-Control-Allow-Origin"
+      - "Content-Type"
+      - "Origin"
+      - "Accept"
+      - "Content-Length"
+      - "Accept-Encoding"
+      - "X-CSRF-Token"
+    options-passthrough: true
+    exposed-headers:
+      - "Location"
+      - "Authorization"
+      - "Content-Disposition"
