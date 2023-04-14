@@ -5,7 +5,10 @@ import (
 	"os"
 
 	"electronic_diary/internal/domain/admin"
-	"electronic_diary/internal/domain/admin/module"
+	AdminModule "electronic_diary/internal/domain/admin/module"
+	"electronic_diary/internal/domain/user"
+	UserModule "electronic_diary/internal/domain/user/module"
+
 	postgesql "electronic_diary/pkg/client/postgres"
 
 	"electronic_diary/internal/config"
@@ -19,6 +22,7 @@ type App struct {
 
 	router      *gin.Engine
 	adminModule admin.Module
+	userModule  user.Module
 }
 
 func NewApp(cfg *config.Config) *App {
@@ -42,7 +46,8 @@ func NewApp(cfg *config.Config) *App {
 	runAutoMigrate(pgClient)
 
 	// Modules
-	adminModule := module.NewAdminModule(pgClient)
+	adminModule := AdminModule.NewAdminModule(pgClient)
+	userModule := UserModule.NewUserModule(pgClient)
 
 	router := gin.Default()
 
@@ -51,6 +56,7 @@ func NewApp(cfg *config.Config) *App {
 		router: router,
 
 		adminModule: adminModule,
+		userModule:  userModule,
 	}
 }
 
@@ -72,6 +78,7 @@ func (a *App) setupHTTP() {
 	prefix := a.router.Group("api")
 
 	// Controllers
+	a.userModule.RegisterController(prefix)
 	a.adminModule.RegisterController(prefix)
 
 	addr := fmt.Sprintf("%s:%s", a.cfg.HTTP.HOST, a.cfg.HTTP.PORT)

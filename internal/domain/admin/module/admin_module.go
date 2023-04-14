@@ -15,7 +15,7 @@ type Admin struct {
 	UseCase admin.UseCase
 }
 
-func NewAdminModule(db *gorm.DB) admin.Module {
+func NewAdminModule(db *gorm.DB) *Admin {
 	adminUC := usecase.NewAdminUseCase(db)
 
 	return &Admin{
