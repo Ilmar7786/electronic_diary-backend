@@ -21,12 +21,3 @@
 # Go workspace file
 go.work
 
-# Virtual variables
-.env
-
-# Build
-build
-
-# IDE
-.idea
-.vscode

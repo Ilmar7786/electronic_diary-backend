@@ -17,3 +17,11 @@ func ParseAndValidateJSON[T validation.Validatable](c *gin.Context) (T, error) {
 
 	return input, nil
 }
+
+type ResponseError struct {
+	Message string `json:"message"`
+}
+
+func NewErrorResponse(c *gin.Context, statusCode int, message string) {
+	c.AbortWithStatusJSON(statusCode, ResponseError{message})
+}

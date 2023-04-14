@@ -1,10 +1,12 @@
 package app
 
 import (
-	"electronic_diary/internal/domain/admin/repository"
-	gorm_postgesql "electronic_diary/pkg/client/postgres"
 	"fmt"
 	"os"
+
+	"electronic_diary/internal/domain/admin"
+	"electronic_diary/internal/domain/admin/module"
+	postgesql "electronic_diary/pkg/client/postgres"
 
 	"electronic_diary/internal/config"
 
@@ -15,7 +17,8 @@ import (
 type App struct {
 	cfg *config.Config
 
-	router *gin.Engine
+	router      *gin.Engine
+	adminModule admin.Module
 }
 
 func NewApp(cfg *config.Config) *App {
@@ -23,31 +26,36 @@ func NewApp(cfg *config.Config) *App {
 		gin.SetMode(gin.DebugMode)
 		os.Setenv(gin.EnvGinMode, gin.DebugMode)
 	} else {
-
 		gin.SetMode(gin.ReleaseMode)
 		os.Setenv(gin.EnvGinMode, gin.ReleaseMode)
 	}
 
-	router := gin.Default()
-	pgConfig := gorm_postgesql.NewConfig(
+	// Configs
+	pgConfig := postgesql.NewConfig(
 		cfg.PostgreSQL.Username, cfg.PostgreSQL.Password, cfg.PostgreSQL.Host,
 		cfg.PostgreSQL.Port, cfg.PostgreSQL.Database)
 
 	// Clients
-	pgClient := gorm_postgesql.NewClient(pgConfig)
+	pgClient := postgesql.NewClient(pgConfig)
+
+	// Migrations
+	runAutoMigrate(pgClient)
 
 	// Modules
-	//adminRepository := repository.NewAdminRepository(pgClient)
-	pgClient.AutoMigrate(&repository.GormAdmin{})
+	adminModule := module.NewAdminModule(pgClient)
+
+	router := gin.Default()
 
 	return &App{
 		cfg:    cfg,
 		router: router,
+
+		adminModule: adminModule,
 	}
 }
 
 func (a *App) Run() {
-	//a.setupHTTP()
+	a.setupHTTP()
 }
 
 func (a *App) setupHTTP() {
@@ -61,7 +69,10 @@ func (a *App) setupHTTP() {
 		Debug:              a.cfg.HTTP.CORS.Debug,
 	}))
 
-	//prefix := a.router.Group("api")
+	prefix := a.router.Group("api")
+
+	// Controllers
+	a.adminModule.RegisterController(prefix)
 
 	addr := fmt.Sprintf("%s:%s", a.cfg.HTTP.HOST, a.cfg.HTTP.PORT)
 	if err := a.router.Run(addr); err != nil {

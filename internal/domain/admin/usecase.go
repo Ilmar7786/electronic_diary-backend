@@ -1,9 +1,8 @@
 package admin
 
+import "electronic_diary/internal/domain/admin/dto"
+
 type UseCase interface {
-	Create() (*Model, error)
-	FindById(id string) (*Model, error)
+	Create(dto dto.CreateAdminDTO) (*Model, error)
 	FindAll() []*Model
-	Update() (*Model, error)
-	Delete(id string) error
 }
