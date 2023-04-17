@@ -20,7 +20,7 @@ clean:
 
 .PHONY: swagger
 swagger:
-	swag init -g ./app/main.go -o ./app/docs
+	swag init -g ./cmd/app/main.go -o ./docs
 
 .PHONY: docker-up
 docker-up:
