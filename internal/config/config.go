@@ -45,7 +45,7 @@ type (
 )
 
 const (
-	pathConfigDefault  = "internal/config/config.local.yaml"
+	pathConfigDefault  = "configs/config.local.yaml"
 	FlagConfigPathName = "config"
 )
 

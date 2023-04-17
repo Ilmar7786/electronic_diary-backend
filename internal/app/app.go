@@ -63,9 +63,11 @@ const apiPrefix = "api"
 func (a *App) setupHTTP() {
 	addr := fmt.Sprintf("%s:%s", a.cfg.HTTP.HOST, a.cfg.HTTP.PORT)
 
-	docs.SwaggerInfo.BasePath = fmt.Sprintf("/%s", apiPrefix)
-	docs.SwaggerInfo.Host = addr
-	a.router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	if a.cfg.App.Debug {
+		docs.SwaggerInfo.BasePath = fmt.Sprintf("/%s", apiPrefix)
+		docs.SwaggerInfo.Host = addr
+		a.router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	}
 
 	a.router.Use(cors.New(cors.Options{
 		AllowedMethods:     a.cfg.HTTP.CORS.AllowedMethods,
