@@ -1,15 +1,19 @@
 package app
 
 import (
+	"fmt"
+	"log"
+
 	"electronic_diary/docs"
 	"electronic_diary/internal/domain/admin"
 	AdminModule "electronic_diary/internal/domain/admin/module"
+	"electronic_diary/internal/domain/role"
+	RoleModule "electronic_diary/internal/domain/role/module"
 	"electronic_diary/internal/domain/user"
 	UserModule "electronic_diary/internal/domain/user/module"
-	"fmt"
+
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"log"
 
 	postgesql "electronic_diary/pkg/client/postgres"
 
@@ -22,7 +26,9 @@ import (
 type App struct {
 	cfg *config.Config
 
-	router      *gin.Engine
+	router *gin.Engine
+
+	roleModule  role.Module
 	userModule  user.Module
 	adminModule admin.Module
 }
@@ -40,6 +46,7 @@ func NewApp(cfg *config.Config) *App {
 	runAutoMigrate(pgClient)
 
 	// Modules
+	roleModule := RoleModule.NewRoleModule(pgClient)
 	userModule := UserModule.NewUserModule(pgClient)
 	adminModule := AdminModule.NewAdminModule(pgClient)
 
@@ -49,6 +56,7 @@ func NewApp(cfg *config.Config) *App {
 		cfg:    cfg,
 		router: router,
 
+		roleModule:  roleModule,
 		userModule:  userModule,
 		adminModule: adminModule,
 	}
@@ -82,6 +90,7 @@ func (a *App) setupHTTP() {
 	prefix := a.router.Group(apiPrefix)
 
 	// Controllers
+	a.roleModule.RegisterController(prefix)
 	a.userModule.RegisterController(prefix)
 	a.adminModule.RegisterController(prefix)
 

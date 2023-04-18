@@ -1,24 +1,24 @@
 package http
 
 import (
-	"electronic_diary/internal/domain/user"
+	"electronic_diary/internal/domain/role"
 
 	"github.com/gin-gonic/gin"
 )
 
-const pathUrlAPI = "users"
+const pathUrlAPI = "roles"
 
-type DeliveryHttpUser struct {
+type DeliveryHttpRole struct {
 	router *gin.RouterGroup
 
-	UserUC user.UseCase
+	RoleUC role.UseCase
 }
 
-func NewDeliveryHttpUser(router *gin.RouterGroup, userUC user.UseCase) {
+func NewDeliveryHttpRole(router *gin.RouterGroup, roleUC role.UseCase) {
 	prefix := router.Group(pathUrlAPI)
-	deliveryHttp := DeliveryHttpUser{
+	deliveryHttp := DeliveryHttpRole{
 		router: router,
-		UserUC: userUC,
+		RoleUC: roleUC,
 	}
 
 	prefix.POST("/", deliveryHttp.handlerCreate)

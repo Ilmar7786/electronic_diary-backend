@@ -38,7 +38,7 @@ func (u User) Create(dto dto.CreateUserDTO) (*user.Model, error) {
 	return &newUser, nil
 }
 
-func (u User) FindById(id string) (*user.Model, error) {
+func (u User) FindByID(id string) (*user.Model, error) {
 	idParse, _ := uuid.Parse(id)
 	var candidate user.Model
 
@@ -67,8 +67,8 @@ func (u User) FindAll() []*user.Model {
 	return users
 }
 
-func (u User) DeleteById(id string) error {
-	candidate, err := u.FindById(id)
+func (u User) Delete(id string) error {
+	candidate, err := u.FindByID(id)
 
 	if err != nil {
 		return err
@@ -78,7 +78,7 @@ func (u User) DeleteById(id string) error {
 }
 
 func (u User) UpdateById(id string, dto dto.UpdateUserDTO) error {
-	candidate, err := u.FindById(id)
+	candidate, err := u.FindByID(id)
 	if err != nil {
 		return err
 	}

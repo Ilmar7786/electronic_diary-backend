@@ -10,6 +10,11 @@ definitions:
           $ref: '#/definitions/api.ParseErrorType'
         type: array
     type: object
+  dto.CreateRoleDTO:
+    properties:
+      name:
+        type: string
+    type: object
   dto.CreateUserDTO:
     properties:
       email:
@@ -23,6 +28,11 @@ definitions:
       surname:
         type: string
     type: object
+  dto.UpdateRoleDTO:
+    properties:
+      name:
+        type: string
+    type: object
   dto.UpdateUserDTO:
     properties:
       email:
@@ -34,6 +44,17 @@ definitions:
       patronymic:
         type: string
       surname:
+        type: string
+    type: object
+  role.Model:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updatedAt:
         type: string
     type: object
   user.Model:
@@ -71,7 +92,166 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
+  /roles:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/role.Model'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ParseErrorType'
+      summary: Список
+      tags:
+      - Роль
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateRoleDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/role.Model'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+      summary: Создать
+      tags:
+      - Роль
+  /roles/{role_id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID роли
+        in: path
+        name: role_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: bool
+        "400":
+          description: Bad Request
+          schema:
+            type: bool
+      summary: Удалить
+      tags:
+      - Роль
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID роли
+        in: path
+        name: role_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/role.Model'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+      summary: Получить одну роль
+      tags:
+      - Роль
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateRoleDTO'
+      - description: ID роли
+        in: path
+        name: role_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: bool
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+      summary: Обновить
+      tags:
+      - Роль
+  /roles/{user_id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID пользователя
+        in: path
+        name: user_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: bool
+        "400":
+          description: Bad Request
+          schema:
+            type: bool
+      summary: Удалить
+      tags:
+      - Пользователь
   /users:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/user.Model'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+      summary: Список пользователей
+      tags:
+      - Пользователь
     post:
       consumes:
       - application/json
@@ -93,30 +273,32 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/api.ResponseError'
-      summary: Авторизация
+      summary: Создать
       tags:
-      - users
-  /users/:
+      - Пользователь
+  /users/{user_id}:
     get:
       consumes:
       - application/json
+      parameters:
+      - description: ID роли
+        in: path
+        name: user_id
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/user.Model'
-            type: array
+            $ref: '#/definitions/user.Model'
         "400":
           description: Bad Request
           schema:
             $ref: '#/definitions/api.ResponseError'
-      summary: Список пользователей
+      summary: Получить одного пользователя
       tags:
-      - users
-  /users/{user_id}:
+      - Пользователь
     put:
       consumes:
       - application/json
@@ -137,14 +319,14 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/user.Model'
+            type: bool
         "400":
           description: Bad Request
           schema:
             $ref: '#/definitions/api.ResponseError'
-      summary: Обновить пользователя
+      summary: Обновить
       tags:
-      - users
+      - Пользователь
 securityDefinitions:
   BasicAuth:
     type: basic

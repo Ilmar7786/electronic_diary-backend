@@ -9,8 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @Summary Авторизация
-// @Tags 	users
+// @Summary Создать
+// @Tags 	Пользователь
 // @Accept 	json
 // @Produce json
 // @Param 	input body   dto.CreateUserDTO true "credentials"
@@ -34,6 +34,27 @@ func (d DeliveryHttpUser) handlerCreate(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, create)
 }
 
+// @Summary Список пользователей
+// @Tags 	Пользователь
+// @Accept 	json
+// @Produce json
+// @Success 200 {object} []user.Model
+// @Failure 400 {object} api.ResponseError
+// @Router /users [get]
+// handlerFindAll - find all users
+func (d DeliveryHttpUser) handlerFindAll(ctx *gin.Context) {
+	users := d.UserUC.FindAll()
+	ctx.JSON(http.StatusOK, users)
+}
+
+// @Summary Получить одного пользователя
+// @Tags 	Пользователь
+// @Accept 	json
+// @Produce json
+// @Param 	user_id	  path	 string false "ID роли"
+// @Success 200 {object} user.Model
+// @Failure 400 {object} api.ResponseError
+// @Router /users/{user_id} [get]
 // handlerFindByID - find user by id
 func (d DeliveryHttpUser) handlerFindByID(ctx *gin.Context) {
 	userId := ctx.Param("id")
@@ -42,35 +63,22 @@ func (d DeliveryHttpUser) handlerFindByID(ctx *gin.Context) {
 		return
 	}
 
-	user, err := d.UserUC.FindById(userId)
+	user, err := d.UserUC.FindByID(userId)
 	if err != nil {
 		api.NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, user)
+	ctx.JSON(http.StatusOK, user)
 }
 
-// @Summary Список пользователей
-// @Tags 	users
-// @Accept 	json
-// @Produce json
-// @Success 200 {object} []user.Model
-// @Failure 400 {object} api.ResponseError
-// @Router /users/ [get]
-// handlerFindAll - find all users
-func (d DeliveryHttpUser) handlerFindAll(ctx *gin.Context) {
-	users := d.UserUC.FindAll()
-	ctx.JSON(http.StatusCreated, users)
-}
-
-// @Summary Обновить пользователя
-// @Tags 	users
+// @Summary Обновить
+// @Tags 	Пользователь
 // @Accept 	json
 // @Produce json
 // @Param 	input 	  body   dto.UpdateUserDTO true "credentials"
 // @Param 	user_id	  path	 string false "ID пользователя"
-// @Success 200 {object} user.Model
+// @Success 200 {bool} 	 true
 // @Failure 400 {object} api.ResponseError
 // @Router /users/{user_id} [put]
 // handlerUpdate - update user
@@ -88,22 +96,26 @@ func (d DeliveryHttpUser) handlerUpdate(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{
-		"status": "ok",
-	})
+	ctx.JSON(http.StatusOK, true)
 }
 
+// @Summary Удалить
+// @Tags 	Пользователь
+// @Accept 	json
+// @Produce json
+// @Param 	user_id	  path	 string false "ID пользователя"
+// @Success 200 {bool} true
+// @Failure 400 {bool} api.ResponseError
+// @Router /roles/{user_id} [delete]
 // handlerDelete - delete user
 func (d DeliveryHttpUser) handlerDelete(ctx *gin.Context) {
 	userId := ctx.Param("id")
 
-	err := d.UserUC.DeleteById(userId)
+	err := d.UserUC.Delete(userId)
 	if err != nil {
 		api.NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{
-		"status": "ok",
-	})
+	ctx.JSON(http.StatusOK, true)
 }
