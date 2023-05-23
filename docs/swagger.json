@@ -1,19 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample server celler server.",
-        "title": "Swagger Example API",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        },
-        "version": "1.0"
+        "contact": {}
     },
     "paths": {
         "/roles": {
@@ -41,7 +29,7 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/api.ParseErrorType"
+                            "$ref": "#/definitions/api.ResponseError"
                         }
                     }
                 }
@@ -84,7 +72,7 @@
                 }
             }
         },
-        "/roles/{role_id}": {
+        "/roles/{id}": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -100,7 +88,7 @@
                     {
                         "type": "string",
                         "description": "ID роли",
-                        "name": "role_id",
+                        "name": "id",
                         "in": "path"
                     }
                 ],
@@ -143,7 +131,7 @@
                     {
                         "type": "string",
                         "description": "ID роли",
-                        "name": "role_id",
+                        "name": "id",
                         "in": "path"
                     }
                 ],
@@ -177,7 +165,7 @@
                     {
                         "type": "string",
                         "description": "ID роли",
-                        "name": "role_id",
+                        "name": "id",
                         "in": "path"
                     }
                 ],
@@ -402,7 +390,12 @@
         "dto.CreateRoleDTO": {
             "type": "object",
             "properties": {
+                "key": {
+                    "description": "@required Обязательное поле",
+                    "type": "string"
+                },
                 "name": {
+                    "description": "@required Обязательное поле",
                     "type": "string"
                 }
             }
@@ -430,6 +423,9 @@
         "dto.UpdateRoleDTO": {
             "type": "object",
             "properties": {
+                "key": {
+                    "type": "string"
+                },
                 "name": {
                     "type": "string"
                 }
@@ -462,6 +458,9 @@
                     "type": "string"
                 },
                 "id": {
+                    "type": "string"
+                },
+                "key": {
                     "type": "string"
                 },
                 "name": {
@@ -501,14 +500,5 @@
                 }
             }
         }
-    },
-    "securityDefinitions": {
-        "BasicAuth": {
-            "type": "basic"
-        }
-    },
-    "externalDocs": {
-        "description": "OpenAPI",
-        "url": "https://swagger.io/resources/open-api/"
     }
 }

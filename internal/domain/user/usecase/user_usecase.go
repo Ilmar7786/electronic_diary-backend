@@ -15,7 +15,7 @@ type User struct {
 	db *gorm.DB
 }
 
-func NewUserUseCase(db *gorm.DB) user.UseCase {
+func NewUser(db *gorm.DB) user.UseCase {
 	return &User{db: db}
 }
 

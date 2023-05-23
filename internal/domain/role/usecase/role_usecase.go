@@ -84,9 +84,9 @@ func (r Role) UpdateById(id string, dto dto.UpdateRoleDTO) error {
 		return err
 	}
 
-	exist, _ := r.FindByName(dto.Name)
+	exist, _ := r.FindByName(*dto.Name)
 	if exist != nil {
-		if candidate.Name != dto.Name {
+		if candidate.Name != *dto.Name {
 			return errors.New(roleExistsEmailError)
 		}
 	}

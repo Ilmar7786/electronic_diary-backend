@@ -51,10 +51,10 @@ func (d DeliveryHttpRole) handlerFindAll(ctx *gin.Context) {
 // @Tags 	Роль
 // @Accept 	json
 // @Produce json
-// @Param 	role_id	  path	 string false "ID роли"
+// @Param 	id	  path	 string false "ID роли"
 // @Success 200 {object} role.Model
 // @Failure 400 {object} api.ResponseError
-// @Router /roles/{role_id} [get]
+// @Router /roles/{id} [get]
 // handlerFindByID - find role by id
 func (d DeliveryHttpRole) handlerFindByID(ctx *gin.Context) {
 	roleId := ctx.Param("id")
@@ -77,10 +77,10 @@ func (d DeliveryHttpRole) handlerFindByID(ctx *gin.Context) {
 // @Accept 	json
 // @Produce json
 // @Param 	input 	  body   dto.UpdateRoleDTO true "credentials"
-// @Param 	role_id	  path	 string false "ID роли"
+// @Param 	id	  path	 string false "ID роли"
 // @Success 200 {bool}   true
 // @Failure 400 {object} api.ResponseError
-// @Router /roles/{role_id} [put]
+// @Router /roles/{id} [put]
 // handlerUpdate - update role
 func (d DeliveryHttpRole) handlerUpdate(ctx *gin.Context) {
 	roleId := ctx.Param("id")
@@ -103,10 +103,10 @@ func (d DeliveryHttpRole) handlerUpdate(ctx *gin.Context) {
 // @Tags 	Роль
 // @Accept 	json
 // @Produce json
-// @Param 	role_id	  path	 string false "ID роли"
+// @Param 	id	  path	 string false "ID роли"
 // @Success 200 {bool} true
 // @Failure 400 {bool} api.ResponseError
-// @Router /roles/{role_id} [delete]
+// @Router /roles/{id} [delete]
 // handlerDelete - delete role
 func (d DeliveryHttpRole) handlerDelete(ctx *gin.Context) {
 	roleId := ctx.Param("id")

@@ -1,8 +1,9 @@
 APP_BIN = build/app
+ARGS = $(filter-out $@,$(MAKECMDGOALS))
 
 .PHONY: run
 run:
-	go run ./cmd/app/main.go
+	go run ./cmd/app/main.go $(ARGS)
 
 .PHONY: lint
 lint:

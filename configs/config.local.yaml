@@ -4,6 +4,7 @@ app:
 http:
   host: 127.0.0.1
   port: 8080
+  prefixApi: 'api'
   cors:
     debug: true
     allowed-methods: [ "GET", "POST", "PATCH", "PUT", "OPTIONS", "DELETE" ]
@@ -26,3 +27,10 @@ http:
       - "Location"
       - "Authorization"
       - "Content-Disposition"
+
+swagger:
+  path: 'docs'
+  title: "Электронный дневник API"
+  version: "v1"
+  schemes:
+    - "http"

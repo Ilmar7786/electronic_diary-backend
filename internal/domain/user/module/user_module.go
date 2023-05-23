@@ -15,8 +15,8 @@ type User struct {
 	UseCase user.UseCase
 }
 
-func NewUserModule(db *gorm.DB) *User {
-	userUC := usecase.NewUserUseCase(db)
+func NewUserModule(db *gorm.DB) user.Module {
+	userUC := usecase.NewUser(db)
 
 	return &User{
 		db:      db,
@@ -26,4 +26,8 @@ func NewUserModule(db *gorm.DB) *User {
 
 func (u User) RegisterController(router *gin.RouterGroup) {
 	http.NewDeliveryHttpUser(router, u.UseCase)
+}
+
+func (u User) GetUseCase() user.UseCase {
+	return u.UseCase
 }

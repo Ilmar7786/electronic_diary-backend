@@ -11,8 +11,9 @@ import (
 
 type (
 	Config struct {
-		App        App  `yaml:"app"`
-		HTTP       HTTP `yaml:"http"`
+		App        App     `yaml:"app"`
+		HTTP       HTTP    `yaml:"http"`
+		Swagger    Swagger `yaml:"swagger"`
 		PostgreSQL PostgreSQL
 	}
 
@@ -21,8 +22,9 @@ type (
 	}
 
 	HTTP struct {
-		PORT string `yaml:"port" env-description:"port on which the server will run"`
-		HOST string `yaml:"host" env-description:"host on which the server will run"`
+		PORT      string `yaml:"port"`
+		HOST      string `yaml:"host"`
+		PrefixAPI string `yaml:"prefixApi"`
 
 		CORS struct {
 			Debug              bool     `yaml:"debug"`
@@ -33,6 +35,13 @@ type (
 			OptionsPassthrough bool     `yaml:"options-passthrough"`
 			ExposedHeaders     []string `yaml:"exposed-headers"`
 		} `yaml:"cors"`
+	}
+
+	Swagger struct {
+		Path    string   `yaml:"path"`
+		Title   string   `yaml:"title"`
+		Version string   `yaml:"version"`
+		Schemes []string `yaml:"schemes"`
 	}
 
 	PostgreSQL struct {

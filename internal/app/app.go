@@ -1,26 +1,18 @@
 package app
 
 import (
-	"fmt"
-	"log"
-
-	"electronic_diary/docs"
-	"electronic_diary/internal/domain/admin"
-	AdminModule "electronic_diary/internal/domain/admin/module"
+	"electronic_diary/internal/domain/auth"
+	AuthModule "electronic_diary/internal/domain/auth/module"
 	"electronic_diary/internal/domain/role"
 	RoleModule "electronic_diary/internal/domain/role/module"
 	"electronic_diary/internal/domain/user"
 	UserModule "electronic_diary/internal/domain/user/module"
-
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 
 	postgesql "electronic_diary/pkg/client/postgres"
 
 	"electronic_diary/internal/config"
 
 	"github.com/gin-gonic/gin"
-	cors "github.com/rs/cors/wrapper/gin"
 )
 
 type App struct {
@@ -28,9 +20,9 @@ type App struct {
 
 	router *gin.Engine
 
-	roleModule  role.Module
-	userModule  user.Module
-	adminModule admin.Module
+	roleModule role.Module
+	userModule user.Module
+	authModule auth.Module
 }
 
 func NewApp(cfg *config.Config) *App {
@@ -48,53 +40,20 @@ func NewApp(cfg *config.Config) *App {
 	// Modules
 	roleModule := RoleModule.NewRoleModule(pgClient)
 	userModule := UserModule.NewUserModule(pgClient)
-	adminModule := AdminModule.NewAdminModule(pgClient)
+	authModule := AuthModule.NewAuthModule(pgClient, userModule.GetUseCase())
 
-	router := gin.Default()
+	router := gin.New()
 
 	return &App{
 		cfg:    cfg,
 		router: router,
 
-		roleModule:  roleModule,
-		userModule:  userModule,
-		adminModule: adminModule,
+		roleModule: roleModule,
+		userModule: userModule,
+		authModule: authModule,
 	}
 }
 
 func (a *App) Run() {
 	a.setupHTTP()
-}
-
-const apiPrefix = "api"
-
-func (a *App) setupHTTP() {
-	addr := fmt.Sprintf("%s:%s", a.cfg.HTTP.HOST, a.cfg.HTTP.PORT)
-
-	if a.cfg.App.Debug {
-		docs.SwaggerInfo.BasePath = fmt.Sprintf("/%s", apiPrefix)
-		docs.SwaggerInfo.Host = addr
-		a.router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	}
-
-	a.router.Use(cors.New(cors.Options{
-		AllowedMethods:     a.cfg.HTTP.CORS.AllowedMethods,
-		AllowedOrigins:     a.cfg.HTTP.CORS.AllowedOrigins,
-		AllowCredentials:   a.cfg.HTTP.CORS.AllowCredentials,
-		AllowedHeaders:     a.cfg.HTTP.CORS.AllowedHeaders,
-		OptionsPassthrough: a.cfg.HTTP.CORS.OptionsPassthrough,
-		ExposedHeaders:     a.cfg.HTTP.CORS.ExposedHeaders,
-		Debug:              a.cfg.HTTP.CORS.Debug,
-	}))
-
-	prefix := a.router.Group(apiPrefix)
-
-	// Controllers
-	a.roleModule.RegisterController(prefix)
-	a.userModule.RegisterController(prefix)
-	a.adminModule.RegisterController(prefix)
-
-	if err := a.router.Run(addr); err != nil {
-		log.Fatalln(err)
-	}
 }
