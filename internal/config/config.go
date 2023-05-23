@@ -22,9 +22,10 @@ type (
 	}
 
 	HTTP struct {
-		PORT      string `yaml:"port"`
-		HOST      string `yaml:"host"`
-		PrefixAPI string `yaml:"prefixApi"`
+		PORT      string   `yaml:"port"`
+		HOST      string   `yaml:"host"`
+		PrefixAPI string   `yaml:"prefixApi"`
+		Proxy     []string `json:"proxy"`
 
 		CORS struct {
 			Debug              bool     `yaml:"debug"`

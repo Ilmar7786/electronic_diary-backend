@@ -24,6 +24,10 @@ func (a *App) setupHTTP() {
 		prefix.GET(fmt.Sprintf("/%s/*any", a.cfg.Swagger.Path), ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 
+	err := a.router.SetTrustedProxies(a.cfg.HTTP.Proxy)
+	if err != nil {
+		log.Fatalln(err)
+	}
 	a.router.Use(cors.New(cors.Options{
 		AllowedMethods:     a.cfg.HTTP.CORS.AllowedMethods,
 		AllowedOrigins:     a.cfg.HTTP.CORS.AllowedOrigins,

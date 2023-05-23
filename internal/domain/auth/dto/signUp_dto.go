@@ -6,12 +6,12 @@ import (
 )
 
 type SignUpDTO struct {
-	Surname    string `json:"surname"`
-	Name       string `json:"name"`
-	Patronymic string `json:"patronymic"`
-	Email      string `json:"email"`
-	Password   string `json:"password"`
-	Remember   bool   `json:"remember"`
+	Surname    string `json:"surname"`    // @required Обязательное поле
+	Name       string `json:"name"`       // @required Обязательное поле
+	Patronymic string `json:"patronymic"` // @required Обязательное поле
+	Email      string `json:"email"`      // @required Обязательное поле
+	Password   string `json:"password"`   // @required Обязательное поле
+	Remember   bool   `json:"remember"`   // @required Обязательное поле
 }
 
 func (u SignUpDTO) Validate() error {

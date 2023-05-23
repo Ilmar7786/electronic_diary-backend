@@ -32,6 +32,36 @@ definitions:
       surname:
         type: string
     type: object
+  dto.SignInDTO:
+    properties:
+      email:
+        description: '@required Обязательное поле'
+        type: string
+      password:
+        description: '@required Обязательное поле'
+        type: string
+    type: object
+  dto.SignUpDTO:
+    properties:
+      email:
+        description: '@required Обязательное поле'
+        type: string
+      name:
+        description: '@required Обязательное поле'
+        type: string
+      password:
+        description: '@required Обязательное поле'
+        type: string
+      patronymic:
+        description: '@required Обязательное поле'
+        type: string
+      remember:
+        description: '@required Обязательное поле'
+        type: boolean
+      surname:
+        description: '@required Обязательное поле'
+        type: string
+    type: object
   dto.UpdateRoleDTO:
     properties:
       key:
@@ -227,6 +257,56 @@ paths:
       summary: Удалить
       tags:
       - Пользователь
+  /sign-in:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SignInDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/role.Model'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+      summary: Авторизация
+      tags:
+      - Аунтификация
+  /sign-up:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SignUpDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/role.Model'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+      summary: Регистрация
+      tags:
+      - Аунтификация
   /users:
     get:
       consumes:

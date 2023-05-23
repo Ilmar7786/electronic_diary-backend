@@ -5,6 +5,7 @@ http:
   host: 127.0.0.1
   port: 8080
   prefixApi: 'api'
+  proxy: [ ]
   cors:
     debug: true
     allowed-methods: [ "GET", "POST", "PATCH", "PUT", "OPTIONS", "DELETE" ]
