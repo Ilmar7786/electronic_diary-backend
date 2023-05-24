@@ -7,12 +7,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type Module interface {
+	RegisterController(router *gin.RouterGroup)
+}
+
 type UseCase interface {
 	SignIn(dto dto.SignInDTO) (*user.Model, error)
 	SignUp(dto dto.SignUpDTO) (*user.Model, error)
 	LogOut()
-}
-
-type Module interface {
-	RegisterController(router *gin.RouterGroup)
 }

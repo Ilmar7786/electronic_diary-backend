@@ -1,6 +1,15 @@
 package user
 
-import "electronic_diary/internal/domain/user/dto"
+import (
+	"electronic_diary/internal/domain/user/dto"
+
+	"github.com/gin-gonic/gin"
+)
+
+type Module interface {
+	RegisterController(router *gin.RouterGroup)
+	GetUseCase() UseCase
+}
 
 type UseCase interface {
 	Create(dto dto.CreateUserDTO) (*Model, error)

@@ -51,10 +51,10 @@ func (d DeliveryHttpUser) handlerFindAll(ctx *gin.Context) {
 // @Tags 	Пользователь
 // @Accept 	json
 // @Produce json
-// @Param 	user_id	  path	 string false "ID роли"
+// @Param 	id	  path	 string false "ID роли"
 // @Success 200 {object} user.Model
 // @Failure 400 {object} api.ResponseError
-// @Router /users/{user_id} [get]
+// @Router /users/{id} [get]
 // handlerFindByID - find user by id
 func (d DeliveryHttpUser) handlerFindByID(ctx *gin.Context) {
 	userId := ctx.Param("id")
@@ -77,10 +77,10 @@ func (d DeliveryHttpUser) handlerFindByID(ctx *gin.Context) {
 // @Accept 	json
 // @Produce json
 // @Param 	input 	  body   dto.UpdateUserDTO true "credentials"
-// @Param 	user_id	  path	 string false "ID пользователя"
+// @Param 	id	  path	 string false "ID пользователя"
 // @Success 200 {bool} 	 true
 // @Failure 400 {object} api.ResponseError
-// @Router /users/{user_id} [put]
+// @Router /users/{id} [patch]
 // handlerUpdate - update user
 func (d DeliveryHttpUser) handlerUpdate(ctx *gin.Context) {
 	userId := ctx.Param("id")
@@ -103,11 +103,11 @@ func (d DeliveryHttpUser) handlerUpdate(ctx *gin.Context) {
 // @Tags 	Пользователь
 // @Accept 	json
 // @Produce json
-// @Param 	user_id	  path	 string false "ID пользователя"
+// @Param 	id	  path	 string false "ID пользователя"
 // @Success 200 {bool} true
 // @Failure 400 {bool} api.ResponseError
-// @Router /roles/{user_id} [delete]
-// handlerDelete - delete user
+// @Router /users/{id} [delete]
+// handlerDelete - delete user by id
 func (d DeliveryHttpUser) handlerDelete(ctx *gin.Context) {
 	userId := ctx.Param("id")
 

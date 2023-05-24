@@ -22,13 +22,13 @@ func NewAuth(db *gorm.DB, userUC user.UseCase) auth.UseCase {
 }
 
 func (a Auth) SignIn(dto dto.SignInDTO) (*user.Model, error) {
-	candidateUser, err := a.userUC.FindByEmail(dto.Email)
+	currentUser, err := a.userUC.FindByEmail(dto.Email)
 
-	if err != nil || candidateUser.Password != dto.Password {
+	if err != nil || currentUser.ComparePassword(dto.Password) != nil {
 		return nil, errors.New("not validation email or password")
 	}
 
-	return candidateUser, nil
+	return currentUser, nil
 }
 
 func (a Auth) SignUp(dto dto.SignUpDTO) (*user.Model, error) {

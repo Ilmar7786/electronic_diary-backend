@@ -16,7 +16,7 @@ import (
 // @Param 	input body   dto.SignInDTO true "credentials"
 // @Success 200 {object} role.Model
 // @Failure 400 {object} api.ResponseError
-// @Router /sign-in [post]
+// @Router /auth/sign-in [post]
 // handlerSignIn - authorization
 func (d DeliveryHttpAuth) handlerSignIn(ctx *gin.Context) {
 	body, err := api.ParseAndValidateJSON[dto.SignInDTO](ctx)
@@ -41,7 +41,7 @@ func (d DeliveryHttpAuth) handlerSignIn(ctx *gin.Context) {
 // @Param 	input body   dto.SignUpDTO true "credentials"
 // @Success 201 {object} role.Model
 // @Failure 400 {object} api.ResponseError
-// @Router /sign-up [post]
+// @Router /auth/sign-up [post]
 // handlerSignUp - register
 func (d DeliveryHttpAuth) handlerSignUp(ctx *gin.Context) {
 	body, err := api.ParseAndValidateJSON[dto.SignUpDTO](ctx)

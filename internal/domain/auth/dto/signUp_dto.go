@@ -11,7 +11,6 @@ type SignUpDTO struct {
 	Patronymic string `json:"patronymic"` // @required Обязательное поле
 	Email      string `json:"email"`      // @required Обязательное поле
 	Password   string `json:"password"`   // @required Обязательное поле
-	Remember   bool   `json:"remember"`   // @required Обязательное поле
 }
 
 func (u SignUpDTO) Validate() error {

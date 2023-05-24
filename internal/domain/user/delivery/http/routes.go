@@ -24,6 +24,6 @@ func NewDeliveryHttpUser(router *gin.RouterGroup, userUC user.UseCase) {
 	prefix.POST("/", deliveryHttp.handlerCreate)
 	prefix.GET("/", deliveryHttp.handlerFindAll)
 	prefix.GET("/:id", deliveryHttp.handlerFindByID)
-	prefix.PUT("/:id", deliveryHttp.handlerUpdate)
+	prefix.PATCH("/:id", deliveryHttp.handlerUpdate)
 	prefix.DELETE("/:id", deliveryHttp.handlerDelete)
 }

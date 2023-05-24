@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"errors"
+	"log"
 
 	"electronic_diary/internal/domain/role"
 	"electronic_diary/internal/domain/role/dto"
@@ -84,18 +85,13 @@ func (r Role) UpdateById(id string, dto dto.UpdateRoleDTO) error {
 		return err
 	}
 
-	exist, _ := r.FindByName(*dto.Name)
-	if exist != nil {
-		if candidate.Name != *dto.Name {
-			return errors.New(roleExistsEmailError)
-		}
-	}
-
 	if err := mapstructure.Decode(dto, &candidate); err != nil {
 		return err
 	}
 
-	if err := r.db.Save(&candidate).Error; err != nil {
+	if err := r.db.Updates(&candidate).Error; err != nil {
+		log.Println(err)
+		log.Println(err.Error())
 		return err
 	}
 

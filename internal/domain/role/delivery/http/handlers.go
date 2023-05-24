@@ -80,7 +80,7 @@ func (d DeliveryHttpRole) handlerFindByID(ctx *gin.Context) {
 // @Param 	id	  path	 string false "ID роли"
 // @Success 200 {bool}   true
 // @Failure 400 {object} api.ResponseError
-// @Router /roles/{id} [put]
+// @Router /roles/{id} [patch]
 // handlerUpdate - update role
 func (d DeliveryHttpRole) handlerUpdate(ctx *gin.Context) {
 	roleId := ctx.Param("id")

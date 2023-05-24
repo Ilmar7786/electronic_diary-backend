@@ -15,6 +15,84 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/auth/sign-in": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Аунтификация"
+                ],
+                "summary": "Авторизация",
+                "parameters": [
+                    {
+                        "description": "credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SignInDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/role.Model"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/sign-up": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Аунтификация"
+                ],
+                "summary": "Регистрация",
+                "parameters": [
+                    {
+                        "description": "credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SignUpDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/role.Model"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
         "/roles": {
             "get": {
                 "consumes": [
@@ -118,7 +196,41 @@ const docTemplate = `{
                     }
                 }
             },
-            "put": {
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Роль"
+                ],
+                "summary": "Удалить",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID роли",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "bool"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "bool"
+                        }
+                    }
+                }
+            },
+            "patch": {
                 "consumes": [
                     "application/json"
                 ],
@@ -151,154 +263,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "type": "bool"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/api.ResponseError"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Роль"
-                ],
-                "summary": "Удалить",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "ID роли",
-                        "name": "id",
-                        "in": "path"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "bool"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "bool"
-                        }
-                    }
-                }
-            }
-        },
-        "/roles/{user_id}": {
-            "delete": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Пользователь"
-                ],
-                "summary": "Удалить",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "ID пользователя",
-                        "name": "user_id",
-                        "in": "path"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "bool"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "bool"
-                        }
-                    }
-                }
-            }
-        },
-        "/sign-in": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Аунтификация"
-                ],
-                "summary": "Авторизация",
-                "parameters": [
-                    {
-                        "description": "credentials",
-                        "name": "input",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.SignInDTO"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/role.Model"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/api.ResponseError"
-                        }
-                    }
-                }
-            }
-        },
-        "/sign-up": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Аунтификация"
-                ],
-                "summary": "Регистрация",
-                "parameters": [
-                    {
-                        "description": "credentials",
-                        "name": "input",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.SignUpDTO"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/role.Model"
                         }
                     },
                     "400": {
@@ -378,7 +342,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/{user_id}": {
+        "/users/{id}": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -394,7 +358,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "ID роли",
-                        "name": "user_id",
+                        "name": "id",
                         "in": "path"
                     }
                 ],
@@ -413,7 +377,41 @@ const docTemplate = `{
                     }
                 }
             },
-            "put": {
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Пользователь"
+                ],
+                "summary": "Удалить",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID пользователя",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "bool"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "bool"
+                        }
+                    }
+                }
+            },
+            "patch": {
                 "consumes": [
                     "application/json"
                 ],
@@ -437,7 +435,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "ID пользователя",
-                        "name": "user_id",
+                        "name": "id",
                         "in": "path"
                     }
                 ],
@@ -493,18 +491,23 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "email": {
+                    "description": "@required Обязательное поле",
                     "type": "string"
                 },
                 "name": {
+                    "description": "@required Обязательное поле",
                     "type": "string"
                 },
                 "password": {
+                    "description": "@required Обязательное поле",
                     "type": "string"
                 },
                 "patronymic": {
+                    "description": "@required Обязательное поле",
                     "type": "string"
                 },
                 "surname": {
+                    "description": "@required Обязательное поле",
                     "type": "string"
                 }
             }
@@ -519,6 +522,9 @@ const docTemplate = `{
                 "password": {
                     "description": "@required Обязательное поле",
                     "type": "string"
+                },
+                "remember": {
+                    "type": "boolean"
                 }
             }
         },
@@ -540,10 +546,6 @@ const docTemplate = `{
                 "patronymic": {
                     "description": "@required Обязательное поле",
                     "type": "string"
-                },
-                "remember": {
-                    "description": "@required Обязательное поле",
-                    "type": "boolean"
                 },
                 "surname": {
                     "description": "@required Обязательное поле",

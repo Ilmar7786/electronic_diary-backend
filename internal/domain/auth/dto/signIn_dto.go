@@ -8,6 +8,7 @@ import (
 type SignInDTO struct {
 	Email    string `json:"email"`    // @required Обязательное поле
 	Password string `json:"password"` // @required Обязательное поле
+	Remember bool   `json:"remember"`
 }
 
 func (s SignInDTO) Validate() error {

@@ -83,10 +83,12 @@ func (u User) UpdateById(id string, dto dto.UpdateUserDTO) error {
 		return err
 	}
 
-	exist, _ := u.FindByEmail(dto.Email)
-	if exist != nil {
-		if candidate.Email != dto.Email {
-			return errors.New(userExistsEmailError)
+	if dto.Email != nil {
+		exist, _ := u.FindByEmail(*dto.Email)
+		if exist != nil {
+			if candidate.Email != *dto.Email {
+				return errors.New(userExistsEmailError)
+			}
 		}
 	}
 
@@ -94,7 +96,7 @@ func (u User) UpdateById(id string, dto dto.UpdateUserDTO) error {
 		return err
 	}
 
-	if err := u.db.Save(&candidate).Error; err != nil {
+	if err := u.db.Updates(&candidate).Error; err != nil {
 		return err
 	}
 

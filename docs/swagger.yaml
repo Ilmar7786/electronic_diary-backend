@@ -22,14 +22,19 @@ definitions:
   dto.CreateUserDTO:
     properties:
       email:
+        description: '@required Обязательное поле'
         type: string
       name:
+        description: '@required Обязательное поле'
         type: string
       password:
+        description: '@required Обязательное поле'
         type: string
       patronymic:
+        description: '@required Обязательное поле'
         type: string
       surname:
+        description: '@required Обязательное поле'
         type: string
     type: object
   dto.SignInDTO:
@@ -40,6 +45,8 @@ definitions:
       password:
         description: '@required Обязательное поле'
         type: string
+      remember:
+        type: boolean
     type: object
   dto.SignUpDTO:
     properties:
@@ -55,9 +62,6 @@ definitions:
       patronymic:
         description: '@required Обязательное поле'
         type: string
-      remember:
-        description: '@required Обязательное поле'
-        type: boolean
       surname:
         description: '@required Обязательное поле'
         type: string
@@ -117,6 +121,56 @@ definitions:
 info:
   contact: {}
 paths:
+  /auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SignInDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/role.Model'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+      summary: Авторизация
+      tags:
+      - Аунтификация
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SignUpDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/role.Model'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+      summary: Регистрация
+      tags:
+      - Аунтификация
   /roles:
     get:
       consumes:
@@ -206,7 +260,7 @@ paths:
       summary: Получить одну роль
       tags:
       - Роль
-    put:
+    patch:
       consumes:
       - application/json
       parameters:
@@ -234,79 +288,6 @@ paths:
       summary: Обновить
       tags:
       - Роль
-  /roles/{user_id}:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: ID пользователя
-        in: path
-        name: user_id
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: bool
-        "400":
-          description: Bad Request
-          schema:
-            type: bool
-      summary: Удалить
-      tags:
-      - Пользователь
-  /sign-in:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: credentials
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/dto.SignInDTO'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/role.Model'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/api.ResponseError'
-      summary: Авторизация
-      tags:
-      - Аунтификация
-  /sign-up:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: credentials
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/dto.SignUpDTO'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/role.Model'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/api.ResponseError'
-      summary: Регистрация
-      tags:
-      - Аунтификация
   /users:
     get:
       consumes:
@@ -351,14 +332,36 @@ paths:
       summary: Создать
       tags:
       - Пользователь
-  /users/{user_id}:
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID пользователя
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: bool
+        "400":
+          description: Bad Request
+          schema:
+            type: bool
+      summary: Удалить
+      tags:
+      - Пользователь
     get:
       consumes:
       - application/json
       parameters:
       - description: ID роли
         in: path
-        name: user_id
+        name: id
         type: string
       produces:
       - application/json
@@ -374,7 +377,7 @@ paths:
       summary: Получить одного пользователя
       tags:
       - Пользователь
-    put:
+    patch:
       consumes:
       - application/json
       parameters:
@@ -386,7 +389,7 @@ paths:
           $ref: '#/definitions/dto.UpdateUserDTO'
       - description: ID пользователя
         in: path
-        name: user_id
+        name: id
         type: string
       produces:
       - application/json
