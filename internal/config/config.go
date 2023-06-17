@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 	"sync"
+	"time"
 
 	"github.com/ilyakaznacheev/cleanenv"
 	"github.com/joho/godotenv"
@@ -18,7 +19,15 @@ type (
 	}
 
 	App struct {
-		Debug bool `yaml:"debug"`
+		Debug bool `yaml:"is-debug"`
+		Jwt   struct {
+			AccessTokenPrivateKey            string        `yaml:"access-token-key"`
+			AccessTokenExpiredIn             time.Duration `yaml:"access-token-expired-in"`
+			AccessTokenExpiredInNotRemember  time.Duration `yaml:"access-token-expired-in-not-remember"`
+			RefreshTokenPrivateKey           string        `yaml:"refresh-token-key"`
+			RefreshTokenExpiredIn            time.Duration `yaml:"refresh-token-expired-in"`
+			RefreshTokenExpiredInNotRemember time.Duration `yaml:"refresh-token-expired-in-not-remember"`
+		} `yaml:"jwt-token"`
 	}
 
 	HTTP struct {

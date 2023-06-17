@@ -26,3 +26,7 @@ swagger:
 .PHONY: docker-up
 docker-up:
 	docker-compose up
+
+.PHONY: generate-migration
+generate-migration:
+	migrate create -ext sql -dir migrations -seq $(name)

@@ -7,14 +7,32 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type ResponseError struct {
-	Errors []ParseErrorType `json:"errors"`
+type (
+	ResponseErrors struct {
+		Errors []ParseErrorType `json:"errors"`
+	}
+
+	ResponseError struct {
+		Error string `json:"error"`
+	}
+
+	ParseErrorType = map[string]string
+
+	Response struct {
+		Message string `json:"message"`
+	}
+)
+
+func NewErrorsResponse(ctx *gin.Context, statusCode int, message string) {
+	ctx.AbortWithStatusJSON(statusCode, ResponseErrors{Errors: ParseError(message)})
 }
 
-type ParseErrorType = map[string]string
+func NewErrorResponse(ctx *gin.Context, statusCode int, message string) {
+	ctx.AbortWithStatusJSON(statusCode, ResponseError{Error: message})
+}
 
-func NewErrorResponse(c *gin.Context, statusCode int, message string) {
-	c.AbortWithStatusJSON(statusCode, ResponseError{Errors: ParseError(message)})
+func NewError(str string) ResponseError {
+	return ResponseError{Error: str}
 }
 
 func ParseError(str string) []ParseErrorType {

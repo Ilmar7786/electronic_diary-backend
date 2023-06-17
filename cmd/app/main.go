@@ -5,6 +5,9 @@ import (
 	"electronic_diary/internal/config"
 )
 
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 	cfg := config.GetConfig()
 

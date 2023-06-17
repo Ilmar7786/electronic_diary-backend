@@ -3,38 +3,81 @@ definitions:
     additionalProperties:
       type: string
     type: object
+  api.Response:
+    properties:
+      message:
+        type: string
+    type: object
   api.ResponseError:
+    properties:
+      error:
+        type: string
+    type: object
+  api.ResponseErrors:
     properties:
       errors:
         items:
           $ref: '#/definitions/api.ParseErrorType'
         type: array
     type: object
-  dto.CreateRoleDTO:
+  auth.Tokens:
     properties:
-      key:
-        description: '@required Обязательное поле'
+      access:
         type: string
-      name:
-        description: '@required Обязательное поле'
+      refresh:
         type: string
     type: object
   dto.CreateUserDTO:
     properties:
-      email:
-        description: '@required Обязательное поле'
+      address:
+        maxLength: 255
         type: string
+      email:
+        maxLength: 100
+        type: string
+      isActive:
+        default: false
+        type: boolean
+      isSuperUser:
+        default: false
+        type: boolean
       name:
-        description: '@required Обязательное поле'
+        maxLength: 40
+        minLength: 1
         type: string
       password:
-        description: '@required Обязательное поле'
+        maxLength: 30
         type: string
       patronymic:
-        description: '@required Обязательное поле'
+        maxLength: 40
+        minLength: 1
+        type: string
+      phone:
+        maxLength: 30
+        type: string
+      role:
+        enum:
+        - STUDENT
+        - TEACHER
+        - PARENT
         type: string
       surname:
-        description: '@required Обязательное поле'
+        maxLength: 40
+        minLength: 1
+        type: string
+    required:
+    - address
+    - email
+    - name
+    - password
+    - patronymic
+    - phone
+    - role
+    - surname
+    type: object
+  dto.RefreshTokenDTO:
+    properties:
+      token:
         type: string
     type: object
   dto.SignInDTO:
@@ -48,79 +91,236 @@ definitions:
       remember:
         type: boolean
     type: object
-  dto.SignUpDTO:
-    properties:
-      email:
-        description: '@required Обязательное поле'
-        type: string
-      name:
-        description: '@required Обязательное поле'
-        type: string
-      password:
-        description: '@required Обязательное поле'
-        type: string
-      patronymic:
-        description: '@required Обязательное поле'
-        type: string
-      surname:
-        description: '@required Обязательное поле'
-        type: string
-    type: object
-  dto.UpdateRoleDTO:
-    properties:
-      key:
-        type: string
-      name:
-        type: string
-    type: object
   dto.UpdateUserDTO:
     properties:
+      address:
+        type: string
       email:
         type: string
+      isActive:
+        type: boolean
+      isSuperUser:
+        type: boolean
       name:
         type: string
       password:
         type: string
       patronymic:
         type: string
+      phone:
+        type: string
+      role:
+        enum:
+        - STUDENT
+        - TEACHER
+        - PARENT
+        type: string
       surname:
-        type: string
-    type: object
-  role.Model:
-    properties:
-      createdAt:
-        type: string
-      id:
-        type: string
-      key:
-        type: string
-      name:
-        type: string
-      updatedAt:
         type: string
     type: object
   user.Model:
     properties:
+      address:
+        type: string
       createdAt:
         type: string
       email:
         type: string
       id:
         type: string
-      isEmail:
+      isActive:
+        type: boolean
+      isSuperUser:
         type: boolean
       name:
         type: string
       patronymic:
         type: string
+      phone:
+        type: string
+      role:
+        allOf:
+        - $ref: '#/definitions/user.Role'
+        enum:
+        - STUDENT
+        - TEACHER
+        - PARENT
       surname:
         type: string
       updatedAt:
         type: string
     type: object
+  user.Role:
+    enum:
+    - TEACHER
+    - STUDENT
+    - PARENT
+    type: string
+    x-enum-varnames:
+    - TeacherRole
+    - StudentRole
+    - ParentRole
 info:
   contact: {}
 paths:
+  /admin/users:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/user.Model'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Список пользователей
+      tags:
+      - Администратор
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.Model'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Создать пользователя
+      tags:
+      - Администратор
+  /admin/users/{userId}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Индефикатор пользователя
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Удалить пользователя
+      tags:
+      - Администратор
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: Индефикатор пользователя
+        in: path
+        name: userId
+        required: true
+        type: string
+      - description: ' '
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Обновить пользователя
+      tags:
+      - Администратор
+  /auth/refresh:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RefreshTokenDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.Tokens'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseErrors'
+      summary: Обновление токена
+      tags:
+      - Аунтификация
   /auth/sign-in:
     post:
       consumes:
@@ -138,186 +338,18 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/role.Model'
+            $ref: '#/definitions/user.Model'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/api.ResponseError'
+            $ref: '#/definitions/api.ResponseErrors'
       summary: Авторизация
       tags:
       - Аунтификация
-  /auth/sign-up:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: credentials
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/dto.SignUpDTO'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/role.Model'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/api.ResponseError'
-      summary: Регистрация
-      tags:
-      - Аунтификация
-  /roles:
+  /user/info:
     get:
       consumes:
       - application/json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/role.Model'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/api.ResponseError'
-      summary: Список
-      tags:
-      - Роль
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: credentials
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/dto.CreateRoleDTO'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/role.Model'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/api.ResponseError'
-      summary: Создать
-      tags:
-      - Роль
-  /roles/{id}:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: ID роли
-        in: path
-        name: id
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: bool
-        "400":
-          description: Bad Request
-          schema:
-            type: bool
-      summary: Удалить
-      tags:
-      - Роль
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: ID роли
-        in: path
-        name: id
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/role.Model'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/api.ResponseError'
-      summary: Получить одну роль
-      tags:
-      - Роль
-    patch:
-      consumes:
-      - application/json
-      parameters:
-      - description: credentials
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/dto.UpdateRoleDTO'
-      - description: ID роли
-        in: path
-        name: id
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: bool
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/api.ResponseError'
-      summary: Обновить
-      tags:
-      - Роль
-  /users:
-    get:
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/user.Model'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/api.ResponseError'
-      summary: Список пользователей
-      tags:
-      - Пользователь
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: credentials
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/dto.CreateUserDTO'
       produces:
       - application/json
       responses:
@@ -329,80 +361,18 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/api.ResponseError'
-      summary: Создать
-      tags:
-      - Пользователь
-  /users/{id}:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: ID пользователя
-        in: path
-        name: id
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: bool
-        "400":
-          description: Bad Request
-          schema:
-            type: bool
-      summary: Удалить
-      tags:
-      - Пользователь
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: ID роли
-        in: path
-        name: id
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/user.Model'
-        "400":
-          description: Bad Request
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/api.ResponseError'
-      summary: Получить одного пользователя
+      security:
+      - ApiKeyAuth: []
+      summary: Информация о пользователи
       tags:
       - Пользователь
-    patch:
-      consumes:
-      - application/json
-      parameters:
-      - description: credentials
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/dto.UpdateUserDTO'
-      - description: ID пользователя
-        in: path
-        name: id
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: bool
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/api.ResponseError'
-      summary: Обновить
-      tags:
-      - Пользователь
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
