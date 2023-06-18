@@ -1,7 +1,6 @@
 package config
 
 import (
-	"flag"
 	"log"
 	"sync"
 	"time"
@@ -63,33 +62,24 @@ type (
 	}
 )
 
-const (
-	pathConfigDefault  = "configs/config.local.yaml"
-	FlagConfigPathName = "config"
-)
-
-var configPath string
 var instance *Config
 var once sync.Once
 
-func GetConfig() *Config {
+func GetConfig(path string) *Config {
 	once.Do(func() {
-		flag.StringVar(&configPath, FlagConfigPathName, pathConfigDefault, "this is app config file")
-		flag.Parse()
-
 		log.Print("config init")
 
 		if err := godotenv.Load(); err != nil {
 			log.Println("virtual environment file (.env) not found")
 		}
 
-		if configPath == "" {
+		if path == "" {
 			log.Fatal("config path is required")
 		}
 
 		instance = &Config{}
 
-		if err := cleanenv.ReadConfig(configPath, instance); err != nil {
+		if err := cleanenv.ReadConfig(path, instance); err != nil {
 			help, _ := cleanenv.GetDescription(instance, nil)
 			log.Println(help)
 			log.Fatal(err)

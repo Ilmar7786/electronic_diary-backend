@@ -1,51 +1,56 @@
 package app
 
 import (
-	"flag"
 	"log"
-	"strings"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
 const (
-	defaultValue = "disable"
-	flagName     = "migrations"
+	commandUp   = "up"
+	commandDown = "down"
 )
 
-func (a *App) migrations() {
-	var command string
-	flag.StringVar(&command, flagName, defaultValue, "this is app config file")
-	flag.Parse()
-
-	if strings.ToLower(command) == defaultValue {
-		return
-	}
-
-	db, err := a.pgClient.DB()
+func (a *App) migrations(option string) {
+	sql, err := a.pgClient.DB()
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 
-	driver, err := postgres.WithInstance(db, &postgres.Config{})
-	m, err := migrate.NewWithDatabaseInstance(
-		"file:///migrations",
-		"postgres", driver)
+	instance, err := postgres.WithInstance(sql, &postgres.Config{})
+	if err != nil {
+		log.Fatalln(err)
+	}
 
-	switch strings.ToLower(command) {
-	case "up":
-		log.Println("run up migrations")
-		if err := m.Up(); err != nil {
+	m, err := migrate.NewWithDatabaseInstance(
+		"file://migrations",
+		"postgres",
+		instance,
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	switch option {
+	case commandUp:
+		log.Println("migration starting up")
+		err := m.Up()
+		if err != nil {
 			log.Fatalln(err)
 		}
-	case "down":
-		log.Println("run down migrations")
-		if err := m.Down(); err != nil {
+		log.Println("migration success up")
+	case commandDown:
+		log.Println("migration starting down")
+		err := m.Down()
+		if err != nil {
 			log.Fatalln(err)
 		}
+		log.Println("migration success down")
 	case "":
 	default:
-		log.Println("wrong command")
+		log.Fatalln("invalid command")
+
 	}
 }

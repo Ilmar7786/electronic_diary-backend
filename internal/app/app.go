@@ -31,9 +31,6 @@ func NewApp(cfg *config.Config) *App {
 	// Clients
 	pgClient := postgesql.NewClient(pgConfig)
 
-	// Migrations
-	//runAutoMigrate(pgClient)
-
 	// UseCases
 	userUC := UserUC.New(pgClient)
 
@@ -54,6 +51,9 @@ func NewApp(cfg *config.Config) *App {
 }
 
 func (a *App) Run() {
-	a.migrations()
 	a.setupHTTP()
+}
+
+func (a *App) Migrate(option string) {
+	a.migrations(option)
 }
