@@ -3,8 +3,6 @@ package userController
 import (
 	"net/http"
 
-	"electronic_diary/pkg/api"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,13 +16,7 @@ import (
 // @Failure 401 {object}  api.ResponseError
 // @Router /user/info [get]
 func (d DeliveryHttpUser) handlerUserInfo(ctx *gin.Context) {
-	userId := d.authService.GetUserID(ctx)
-
-	user, err := d.userUC.FindByID(userId)
-	if err != nil {
-		api.NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
-		return
-	}
+	user := d.authService.GetUser(ctx)
 
 	ctx.JSON(http.StatusOK, user)
 }

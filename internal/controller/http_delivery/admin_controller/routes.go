@@ -25,7 +25,7 @@ func Register(router *gin.RouterGroup, auth authService.Service, userUC user.Use
 		authService: auth,
 	}
 
-	//prefix.Use(auth.Middleware())
+	prefix.Use(auth.Middleware(&authService.MiddlewareOptions{IsAdmin: true}))
 	users := prefix.Group("users")
 	{
 		users.POST("/", deliveryHttp.handlerUserCreate)

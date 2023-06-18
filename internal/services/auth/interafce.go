@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"electronic_diary/internal/domain/user"
 	"electronic_diary/internal/services/auth/dto"
 
 	"github.com/gin-gonic/gin"
@@ -8,7 +9,7 @@ import (
 
 type Service interface {
 	SignIn(dto dto.SignInDTO) (*ResponseAuth, error)
-	Middleware() gin.HandlerFunc
+	Middleware(options *MiddlewareOptions) gin.HandlerFunc
 	RefreshToken(token string) (*Tokens, error)
-	GetUserID(ctx *gin.Context) string
+	GetUser(ctx *gin.Context) user.Model
 }

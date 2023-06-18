@@ -1,5 +1,8 @@
+include .env
+
 APP_BIN = build/app
 ARGS = $(filter-out $@,$(MAKECMDGOALS))
+DATABASE_URL = "postgresql://${PSQL_USER}:${PSQL_PASSWORD}@${PSQL_HOST}:${PSQL_PORT}/${PSQL_DATABASE}?sslmode=disable"
 
 .PHONY: run
 run:
@@ -27,6 +30,11 @@ swagger:
 docker-up:
 	docker-compose up
 
-.PHONY: generate-migration
-generate-migration:
+.PHONY: migration-generate
+migration-generate:
 	migrate create -ext sql -dir migrations -seq $(name)
+
+.PHONY: migration
+migration:
+	migrate -source file://migrations -database $(DATABASE_URL) $(ARGS)
+

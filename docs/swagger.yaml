@@ -27,6 +27,16 @@ definitions:
       refresh:
         type: string
     type: object
+  constants.Role:
+    enum:
+    - teacher
+    - student
+    - parent
+    type: string
+    x-enum-varnames:
+    - TeacherRole
+    - StudentRole
+    - ParentRole
   dto.CreateUserDTO:
     properties:
       address:
@@ -43,27 +53,25 @@ definitions:
         type: boolean
       name:
         maxLength: 40
-        minLength: 1
         type: string
       password:
         maxLength: 30
         type: string
       patronymic:
         maxLength: 40
-        minLength: 1
         type: string
       phone:
         maxLength: 30
         type: string
       role:
+        allOf:
+        - $ref: '#/definitions/constants.Role'
         enum:
-        - STUDENT
-        - TEACHER
-        - PARENT
-        type: string
+        - student
+        - teacher
+        - parent
       surname:
         maxLength: 40
-        minLength: 1
         type: string
     required:
     - address
@@ -94,28 +102,38 @@ definitions:
   dto.UpdateUserDTO:
     properties:
       address:
+        maxLength: 255
         type: string
       email:
+        maxLength: 100
         type: string
       isActive:
+        default: false
         type: boolean
       isSuperUser:
+        default: false
         type: boolean
       name:
+        maxLength: 40
         type: string
       password:
+        maxLength: 30
         type: string
       patronymic:
+        maxLength: 40
         type: string
       phone:
+        maxLength: 30
         type: string
       role:
+        allOf:
+        - $ref: '#/definitions/constants.Role'
         enum:
-        - STUDENT
-        - TEACHER
-        - PARENT
-        type: string
+        - student
+        - teacher
+        - parent
       surname:
+        maxLength: 40
         type: string
     type: object
   user.Model:
@@ -140,26 +158,16 @@ definitions:
         type: string
       role:
         allOf:
-        - $ref: '#/definitions/user.Role'
+        - $ref: '#/definitions/constants.Role'
         enum:
-        - STUDENT
-        - TEACHER
-        - PARENT
+        - student
+        - teacher
+        - parent
       surname:
         type: string
       updatedAt:
         type: string
     type: object
-  user.Role:
-    enum:
-    - TEACHER
-    - STUDENT
-    - PARENT
-    type: string
-    x-enum-varnames:
-    - TeacherRole
-    - StudentRole
-    - ParentRole
 info:
   contact: {}
 paths:

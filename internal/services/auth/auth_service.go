@@ -15,19 +15,15 @@ import (
 const keyUserStorageCtx = "userId"
 
 type Auth struct {
-	userUC         user.UseCase
-	authMiddleware gin.HandlerFunc
+	userUC user.UseCase
 
 	cfg config.App
 }
 
 func New(userUC user.UseCase, cfg config.App) Service {
-	authMiddleware := newMiddleware(cfg.Jwt.AccessTokenPrivateKey)
-
 	return &Auth{
-		userUC:         userUC,
-		authMiddleware: authMiddleware,
-		cfg:            cfg,
+		userUC: userUC,
+		cfg:    cfg,
 	}
 }
 
@@ -68,10 +64,6 @@ func (a Auth) RefreshToken(token string) (*Tokens, error) {
 	return tokens, nil
 }
 
-func (a Auth) Middleware() gin.HandlerFunc {
-	return a.authMiddleware
-}
-
-func (a Auth) GetUserID(ctx *gin.Context) string {
-	return getMustGetAuth(ctx)
+func (a Auth) GetUser(ctx *gin.Context) user.Model {
+	return ctx.MustGet(keyUserStorageCtx).(user.Model)
 }

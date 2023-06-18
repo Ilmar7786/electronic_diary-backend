@@ -4,27 +4,37 @@ import (
 	"fmt"
 	"net/http"
 
+	"electronic_diary/pkg/api"
+
 	"github.com/gin-gonic/gin"
 )
 
-func newMiddleware(privateKey string) gin.HandlerFunc {
+type MiddlewareOptions struct {
+	IsAdmin bool
+}
+
+func (a Auth) Middleware(options *MiddlewareOptions) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		sub, err := parseToken(c, privateKey)
+		sub, err := parseToken(c, a.cfg.Jwt.AccessTokenPrivateKey)
 		if err != nil {
 			return
 		}
 
-		userId := fmt.Sprint(sub.UserID)
-		if userId == "" {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "the user belonging to this token no logger exists"})
+		currentUser, err := a.userUC.FindByID(fmt.Sprint(sub.UserID))
+
+		if options != nil {
+			if options.IsAdmin && !currentUser.IsSuperUser {
+				c.AbortWithStatusJSON(http.StatusForbidden, api.NewError("not enough rights"))
+				return
+			}
+		}
+
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, api.NewError("the user belonging to this token no logger exists"))
 			return
 		}
 
-		c.Set(keyUserStorageCtx, userId)
+		c.Set(keyUserStorageCtx, *currentUser)
 		c.Next()
 	}
-}
-
-func getMustGetAuth(ctx *gin.Context) string {
-	return ctx.MustGet(keyUserStorageCtx).(string)
 }

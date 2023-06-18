@@ -8,16 +8,16 @@ import (
 )
 
 type UpdateUserDTO struct {
-	Surname     *string         `json:"surname"`
-	Name        *string         `json:"name"`
-	Patronymic  *string         `json:"patronymic"`
-	Address     *string         `json:"address"`
-	Phone       *string         `json:"phone"`
-	Email       *string         `json:"email"`
-	Password    *string         `json:"password"`
-	Role        *constants.Role `json:"role" enums:"STUDENT,TEACHER,PARENT"`
-	IsActive    *bool           `json:"isActive"`
-	IsSuperUser *bool           `json:"isSuperUser"`
+	Surname     *string        `json:"surname" maxLength:"40"`
+	Name        *string        `json:"name" maxLength:"40"`
+	Patronymic  *string        `json:"patronymic" maxLength:"40"`
+	Address     *string        `json:"address" maxLength:"255"`
+	Phone       *string        `json:"phone" maxLength:"30"`
+	Email       *string        `json:"email" maxLength:"100"`
+	Password    *string        `json:"password" maxLength:"30"`
+	Role        constants.Role `json:"role" enums:"student,teacher,parent"`
+	IsActive    *bool          `json:"isActive" default:"false"`
+	IsSuperUser *bool          `json:"isSuperUser" default:"false"`
 }
 
 func (u UpdateUserDTO) Validate() error {

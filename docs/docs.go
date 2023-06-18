@@ -389,6 +389,19 @@ const docTemplate = `{
                 }
             }
         },
+        "constants.Role": {
+            "type": "string",
+            "enum": [
+                "teacher",
+                "student",
+                "parent"
+            ],
+            "x-enum-varnames": [
+                "TeacherRole",
+                "StudentRole",
+                "ParentRole"
+            ]
+        },
         "dto.CreateUserDTO": {
             "type": "object",
             "required": [
@@ -420,8 +433,7 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string",
-                    "maxLength": 40,
-                    "minLength": 1
+                    "maxLength": 40
                 },
                 "password": {
                     "type": "string",
@@ -429,25 +441,27 @@ const docTemplate = `{
                 },
                 "patronymic": {
                     "type": "string",
-                    "maxLength": 40,
-                    "minLength": 1
+                    "maxLength": 40
                 },
                 "phone": {
                     "type": "string",
                     "maxLength": 30
                 },
                 "role": {
-                    "type": "string",
                     "enum": [
-                        "STUDENT",
-                        "TEACHER",
-                        "PARENT"
+                        "student",
+                        "teacher",
+                        "parent"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/constants.Role"
+                        }
                     ]
                 },
                 "surname": {
                     "type": "string",
-                    "maxLength": 40,
-                    "minLength": 1
+                    "maxLength": 40
                 }
             }
         },
@@ -479,39 +493,52 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "address": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 255
                 },
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 100
                 },
                 "isActive": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": false
                 },
                 "isSuperUser": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": false
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 40
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 30
                 },
                 "patronymic": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 40
                 },
                 "phone": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 30
                 },
                 "role": {
-                    "type": "string",
                     "enum": [
-                        "STUDENT",
-                        "TEACHER",
-                        "PARENT"
+                        "student",
+                        "teacher",
+                        "parent"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/constants.Role"
+                        }
                     ]
                 },
                 "surname": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 40
                 }
             }
         },
@@ -547,13 +574,13 @@ const docTemplate = `{
                 },
                 "role": {
                     "enum": [
-                        "STUDENT",
-                        "TEACHER",
-                        "PARENT"
+                        "student",
+                        "teacher",
+                        "parent"
                     ],
                     "allOf": [
                         {
-                            "$ref": "#/definitions/user.Role"
+                            "$ref": "#/definitions/constants.Role"
                         }
                     ]
                 },
@@ -564,19 +591,6 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
-        },
-        "user.Role": {
-            "type": "string",
-            "enum": [
-                "TEACHER",
-                "STUDENT",
-                "PARENT"
-            ],
-            "x-enum-varnames": [
-                "TeacherRole",
-                "StudentRole",
-                "ParentRole"
-            ]
         }
     },
     "securityDefinitions": {

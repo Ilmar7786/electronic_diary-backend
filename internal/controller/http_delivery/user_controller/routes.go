@@ -24,6 +24,6 @@ func Register(router *gin.RouterGroup, auth authService.Service, userUC user.Use
 		authService: auth,
 	}
 
-	prefix.Use(auth.Middleware())
+	prefix.Use(auth.Middleware(&authService.MiddlewareOptions{}))
 	prefix.GET("/info", deliveryHttp.handlerUserInfo)
 }
