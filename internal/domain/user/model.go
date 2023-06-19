@@ -10,6 +10,23 @@ import (
 	"gorm.io/gorm"
 )
 
+type EmailActivate struct {
+	ID        uuid.UUID `json:"id"`
+	Link      string    `json:"link"`
+	UserID    uuid.UUID `json:"userId"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
+}
+
+func (e *EmailActivate) TableName() string {
+	return "users_email_activate"
+}
+
+func (e *EmailActivate) BeforeCreate(ctx *gorm.DB) (err error) {
+	e.ID = uuid.New()
+	return nil
+}
+
 type Model struct {
 	ID          uuid.UUID      `json:"id"`
 	Surname     string         `json:"surname"`
@@ -19,7 +36,7 @@ type Model struct {
 	Phone       string         `json:"phone"`
 	Email       string         `json:"email"`
 	Password    string         `json:"-"`
-	Role        constants.Role `json:"role" enums:"student,teacher,parent"`
+	Role        constants.Role `json:"role"`
 	IsActive    bool           `json:"isActive"`
 	IsSuperUser bool           `json:"isSuperUser"`
 	CreatedAt   time.Time      `json:"createdAt"`

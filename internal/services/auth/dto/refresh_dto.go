@@ -3,7 +3,7 @@ package dto
 import validation "github.com/go-ozzo/ozzo-validation/v4"
 
 type RefreshTokenDTO struct {
-	Token string `json:"token"`
+	Token string `json:"token" validate:"required"`
 }
 
 func (r RefreshTokenDTO) Validate() error {

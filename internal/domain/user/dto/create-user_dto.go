@@ -14,7 +14,7 @@ type CreateUserDTO struct {
 	Address     string         `json:"address" maxLength:"255" validate:"required"`
 	Phone       string         `json:"phone" maxLength:"30" validate:"required"`
 	Email       string         `json:"email" maxLength:"100" validate:"required"`
-	Password    string         `json:"password" maxLength:"30" validate:"required"`
+	Password    string         `json:"password" minLength:"8" maxLength:"30" validate:"required"`
 	Role        constants.Role `json:"role" enums:"student,teacher,parent" validate:"required"`
 	IsActive    bool           `json:"isActive" default:"false"`
 	IsSuperUser bool           `json:"isSuperUser" default:"false"`

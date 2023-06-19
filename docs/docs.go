@@ -437,7 +437,8 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string",
-                    "maxLength": 30
+                    "maxLength": 30,
+                    "minLength": 8
                 },
                 "patronymic": {
                     "type": "string",
@@ -467,6 +468,9 @@ const docTemplate = `{
         },
         "dto.RefreshTokenDTO": {
             "type": "object",
+            "required": [
+                "token"
+            ],
             "properties": {
                 "token": {
                     "type": "string"
@@ -475,17 +479,23 @@ const docTemplate = `{
         },
         "dto.SignInDTO": {
             "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
             "properties": {
                 "email": {
-                    "description": "@required Обязательное поле",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 100
                 },
                 "password": {
-                    "description": "@required Обязательное поле",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 30,
+                    "minLength": 8
                 },
                 "remember": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": false
                 }
             }
         },
@@ -514,7 +524,8 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string",
-                    "maxLength": 30
+                    "maxLength": 30,
+                    "minLength": 8
                 },
                 "patronymic": {
                     "type": "string",
@@ -573,16 +584,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "role": {
-                    "enum": [
-                        "student",
-                        "teacher",
-                        "parent"
-                    ],
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/constants.Role"
-                        }
-                    ]
+                    "$ref": "#/definitions/constants.Role"
                 },
                 "surname": {
                     "type": "string"

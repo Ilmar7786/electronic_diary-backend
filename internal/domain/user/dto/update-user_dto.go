@@ -14,7 +14,7 @@ type UpdateUserDTO struct {
 	Address     *string        `json:"address" maxLength:"255"`
 	Phone       *string        `json:"phone" maxLength:"30"`
 	Email       *string        `json:"email" maxLength:"100"`
-	Password    *string        `json:"password" maxLength:"30"`
+	Password    *string        `json:"password" minLength:"8" maxLength:"30"`
 	Role        constants.Role `json:"role" enums:"student,teacher,parent"`
 	IsActive    *bool          `json:"isActive" default:"false"`
 	IsSuperUser *bool          `json:"isSuperUser" default:"false"`

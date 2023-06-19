@@ -1,10 +1,13 @@
 package app
 
 import (
+	"log"
+
 	"electronic_diary/internal/domain/user"
 	UserUC "electronic_diary/internal/domain/user/usecase"
 	"electronic_diary/internal/services/auth"
 	postgesql "electronic_diary/pkg/client/postgres"
+	"electronic_diary/pkg/mailer"
 
 	"electronic_diary/internal/config"
 
@@ -20,6 +23,7 @@ type App struct {
 	userUseCase user.UseCase
 
 	authService auth.Service
+	mail        *mailer.Mailer
 }
 
 func NewApp(cfg *config.Config) *App {
@@ -30,6 +34,17 @@ func NewApp(cfg *config.Config) *App {
 
 	// Clients
 	pgClient := postgesql.NewClient(pgConfig)
+	mail, err := mailer.NewMailer(mailer.Config{
+		From:     cfg.Mail.From,
+		HOST:     cfg.Mail.Host,
+		Port:     cfg.Mail.Port,
+		Username: cfg.Mail.Username,
+		Password: cfg.Mail.Password,
+		SSL:      cfg.Mail.SSL,
+	})
+	if err != nil {
+		log.Println("mail: ", err)
+	}
 
 	// UseCases
 	userUC := UserUC.New(pgClient)
@@ -47,6 +62,7 @@ func NewApp(cfg *config.Config) *App {
 		userUseCase: userUC,
 
 		authService: authService,
+		mail:        mail,
 	}
 }
 

@@ -43,3 +43,6 @@ swagger:
   version: "v1"
   schemes:
     - "http"
+
+mail:
+  ssl: true

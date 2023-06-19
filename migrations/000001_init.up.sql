@@ -16,4 +16,13 @@ create table users
     "is_super_user" BOOLEAN DEFAULT FALSE NOT NULL,
     "created_at"    TIMESTAMP,
     "updated_at"    TIMESTAMP
+);
+
+create table users_email_activate
+(
+    "id"         UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    "link"       VARCHAR                                NOT NULL,
+    "user_id"    UUID UNIQUE REFERENCES users ("id") NOT NULL,
+    "created_at" TIMESTAMP,
+    "updated_at" TIMESTAMP
 )

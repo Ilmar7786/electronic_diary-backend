@@ -6,9 +6,9 @@ import (
 )
 
 type SignInDTO struct {
-	Email    string `json:"email"`    // @required Обязательное поле
-	Password string `json:"password"` // @required Обязательное поле
-	Remember bool   `json:"remember"`
+	Email    string `json:"email" maxLength:"100" validate:"required"`
+	Password string `json:"password" minLength:"8" maxLength:"30" validate:"required"`
+	Remember bool   `json:"remember" default:"false"`
 }
 
 func (s SignInDTO) Validate() error {

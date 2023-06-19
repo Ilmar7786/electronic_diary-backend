@@ -32,9 +32,12 @@ docker-up:
 
 .PHONY: migration-generate
 migration-generate:
-	migrate create -ext sql -dir migrations -seq $(name)
+	migrate create -ext sql -dir migrations -seq $(ARGS)
 
 .PHONY: migration
 migration:
 	migrate -source file://migrations -database $(DATABASE_URL) $(ARGS)
 
+.PHONY: create-admin
+create-admin:
+	go run ./cmd/app/createAdmin.go

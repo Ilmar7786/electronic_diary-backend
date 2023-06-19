@@ -16,6 +16,7 @@ type (
 		HTTP       HTTP    `yaml:"http"`
 		Swagger    Swagger `yaml:"swagger"`
 		PostgreSQL PostgreSQL
+		Mail       Mail `yaml:"mail"`
 	}
 
 	App struct {
@@ -60,6 +61,15 @@ type (
 		Host     string `env:"PSQL_HOST" env-description:"host from database" env-required:"true"`
 		Port     string `env:"PSQL_PORT" env-description:"port from database" env-required:"true"`
 		Database string `env:"PSQL_DATABASE" env-description:"name database" env-required:"true"`
+	}
+
+	Mail struct {
+		From     string `env:"MAIL_FROM" env-required:"true"`
+		Password string `env:"MAIL_PASSWORD" env-required:"true"`
+		Username string `env:"MAIL_USERNAME" env-required:"true"`
+		Host     string `env:"MAIL_HOST" env-required:"true"`
+		Port     int    `env:"MAIL_PORT" env-required:"true"`
+		SSL      bool   `yaml:"ssl" env:"MAIL_SSL"`
 	}
 )
 

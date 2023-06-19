@@ -20,6 +20,10 @@ func New(db *gorm.DB) user.UseCase {
 }
 
 func (u User) Create(dto dto.CreateUserDTO) (*user.Model, error) {
+	if err := dto.Validate(); err != nil {
+		return nil, err
+	}
+
 	candidate, _ := u.FindByEmail(dto.Email)
 	if candidate != nil {
 		return nil, errors.New(userExistsEmailError)
@@ -78,6 +82,10 @@ func (u User) Delete(id string) error {
 }
 
 func (u User) UpdateById(id string, dto dto.UpdateUserDTO) error {
+	if err := dto.Validate(); err != nil {
+		return err
+	}
+
 	candidate, err := u.FindByID(id)
 	if err != nil {
 		return err
