@@ -41,8 +41,9 @@ func (a *App) setupHTTP() {
 	}))
 
 	http_delivery.Register(public, http_delivery.Options{
-		UserUC:      a.userUseCase,
+		UserUC:      a.userUC,
 		AuthService: a.authService,
+		SubjectUC:   a.subjectUC,
 	})
 
 	if err := a.router.Run(addr); err != nil {

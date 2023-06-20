@@ -82,7 +82,7 @@ func (d DeliveryHttpAdmin) handlerUserUpdateByID(ctx *gin.Context) {
 // @Failure 	400,401,404 {object}  api.ResponseError
 // @Router 		/admin/users/{userId} [delete]
 func (d DeliveryHttpAdmin) handlerUserDelete(ctx *gin.Context) {
-	userId := ctx.Param("id")
+	userId := ctx.Param("userId")
 	err := d.userUC.Delete(userId)
 	if err != nil {
 		api.NewErrorsResponse(ctx, http.StatusBadRequest, err.Error())

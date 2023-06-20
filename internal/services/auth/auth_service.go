@@ -31,7 +31,7 @@ func (a Auth) SignIn(dto dto.SignInDTO) (*ResponseAuth, error) {
 	currentUser, err := a.userUC.FindByEmail(dto.Email)
 
 	if err != nil || currentUser.ComparePassword(dto.Password) != nil {
-		return nil, errors.New("not validation email or password")
+		return nil, errors.New("wrong login or password")
 	}
 
 	tokens, err := a.generateTokens(currentUser.ID.String(), dto.Remember)

@@ -3,6 +3,8 @@ package app
 import (
 	"log"
 
+	"electronic_diary/internal/domain/subject"
+	SubjectUC "electronic_diary/internal/domain/subject/usecase"
 	"electronic_diary/internal/domain/user"
 	UserUC "electronic_diary/internal/domain/user/usecase"
 	"electronic_diary/internal/services/auth"
@@ -20,7 +22,8 @@ type App struct {
 	pgClient *gorm.DB
 	router   *gin.Engine
 
-	userUseCase user.UseCase
+	userUC    user.UseCase
+	subjectUC subject.UseCase
 
 	authService auth.Service
 	mail        *mailer.Mailer
@@ -48,6 +51,7 @@ func NewApp(cfg *config.Config) *App {
 
 	// UseCases
 	userUC := UserUC.New(pgClient)
+	subjectUC := SubjectUC.New(pgClient)
 
 	// Services
 	authService := auth.New(userUC, cfg.App)
@@ -59,7 +63,8 @@ func NewApp(cfg *config.Config) *App {
 		pgClient: pgClient,
 		router:   router,
 
-		userUseCase: userUC,
+		userUC:    userUC,
+		subjectUC: subjectUC,
 
 		authService: authService,
 		mail:        mail,

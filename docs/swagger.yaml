@@ -37,6 +37,14 @@ definitions:
     - TeacherRole
     - StudentRole
     - ParentRole
+  dto.CreateSubjectDTO:
+    properties:
+      title:
+        maxLength: 40
+        type: string
+    required:
+    - title
+    type: object
   dto.CreateUserDTO:
     properties:
       address:
@@ -107,6 +115,12 @@ definitions:
     - email
     - password
     type: object
+  dto.UpdateSubjectDTO:
+    properties:
+      title:
+        maxLength: 40
+        type: string
+    type: object
   dto.UpdateUserDTO:
     properties:
       address:
@@ -145,6 +159,17 @@ definitions:
         maxLength: 40
         type: string
     type: object
+  subject.Model:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
   user.Model:
     properties:
       address:
@@ -175,6 +200,139 @@ definitions:
 info:
   contact: {}
 paths:
+  /admin/subjects:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/subject.Model'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Список предметов
+      tags:
+      - Администратор
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateSubjectDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/subject.Model'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Создать предмет
+      tags:
+      - Администратор
+  /admin/subjects/{subjectId}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Индефикатор предмета
+        in: path
+        name: subjectId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Удалить предмет
+      tags:
+      - Администратор
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: Индефикатор предмета
+        in: path
+        name: subjectId
+        required: true
+        type: string
+      - description: ' '
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateSubjectDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Обновить предмет
+      tags:
+      - Администратор
   /admin/users:
     get:
       consumes:
