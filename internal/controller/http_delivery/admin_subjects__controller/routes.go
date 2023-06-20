@@ -1,4 +1,4 @@
-package subjectController
+package adminSubjectController
 
 import (
 	"electronic_diary/internal/domain/subject"
@@ -30,7 +30,8 @@ func Register(router *gin.RouterGroup, auth authService.Service, subjectUC subje
 	{
 		subjects.POST("/", deliveryHttp.handlerSubjectCreate)
 		subjects.GET("/", deliveryHttp.handlerSubjectFindAll)
-		subjects.PATCH("/:subjectId", deliveryHttp.handlerSubjectUpdateByID)
-		subjects.DELETE("/:subjectId", deliveryHttp.handlerSubjectDelete)
+		subjects.GET("/:id", deliveryHttp.handlerSubjectById)
+		subjects.PATCH("/:id", deliveryHttp.handlerSubjectUpdateByID)
+		subjects.DELETE("/:id", deliveryHttp.handlerSubjectDelete)
 	}
 }

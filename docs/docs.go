@@ -53,12 +53,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/api.ResponseError"
                         }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/api.ResponseError"
-                        }
                     }
                 }
             },
@@ -111,7 +105,59 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/subject/{subjectId}": {
+        "/admin/subject/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Администратор"
+                ],
+                "summary": "Получить предмет",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Индефикатор предмета",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/subject.Model"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "security": [
                     {
@@ -132,7 +178,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Индефикатор предмета",
-                        "name": "subjectId",
+                        "name": "id",
                         "in": "path",
                         "required": true
                     }
@@ -182,13 +228,6 @@ const docTemplate = `{
                 "summary": "Обновить предмет",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Индефикатор предмета",
-                        "name": "subjectId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
                         "description": " ",
                         "name": "request",
                         "in": "body",
@@ -196,6 +235,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/dto.UpdateSubjectDTO"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Индефикатор предмета",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -264,12 +310,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/api.ResponseError"
                         }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/api.ResponseError"
-                        }
                     }
                 }
             },
@@ -322,7 +362,59 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/users/{userId}": {
+        "/admin/users/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Администратор"
+                ],
+                "summary": "Получить пользователя",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Индефикатор пользователя",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.Model"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "security": [
                     {
@@ -343,7 +435,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Индефикатор пользователя",
-                        "name": "userId",
+                        "name": "id",
                         "in": "path",
                         "required": true
                     }
@@ -395,7 +487,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Индефикатор пользователя",
-                        "name": "userId",
+                        "name": "id",
                         "in": "path",
                         "required": true
                     },
@@ -510,6 +602,77 @@ const docTemplate = `{
                         "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/api.ResponseErrors"
+                        }
+                    }
+                }
+            }
+        },
+        "/subjects": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Предметы"
+                ],
+                "summary": "Список предметов",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/subject.Model"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/subjects/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Предметы"
+                ],
+                "summary": "Список предметов",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Индефикатор предмета",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/subject.Model"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
                         }
                     }
                 }

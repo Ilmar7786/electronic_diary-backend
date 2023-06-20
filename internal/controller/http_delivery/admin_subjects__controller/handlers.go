@@ -1,4 +1,4 @@
-package subjectController
+package adminSubjectController
 
 import (
 	"net/http"
@@ -39,7 +39,7 @@ func (d DeliveryHttpAdmin) handlerSubjectCreate(ctx *gin.Context) {
 // @Accept 	 	json
 // @Produce  	json
 // @Success  	200 {object} []subject.Model
-// @Failure	 	400,401,404 {object} api.ResponseError
+// @Failure	 	400,401 {object} api.ResponseError
 // @Router 		/admin/subject [get]
 func (d DeliveryHttpAdmin) handlerSubjectFindAll(ctx *gin.Context) {
 	subjects := d.subjectUC.FindAll()
@@ -47,17 +47,36 @@ func (d DeliveryHttpAdmin) handlerSubjectFindAll(ctx *gin.Context) {
 }
 
 // @Tags 	 	Администратор
+// @Summary  	Получить предмет
+// @Security 	ApiKeyAuth
+// @Accept 	 	json
+// @Produce  	json
+// @Success  	200 {object} subject.Model
+// @Failure	 	400,401,404 {object} api.ResponseError
+// @Param  	 	id path string true "Индефикатор предмета"
+// @Router 		/admin/subject/{id} [get]
+func (d DeliveryHttpAdmin) handlerSubjectById(ctx *gin.Context) {
+	id := ctx.Param("id")
+	candidate, err := d.subjectUC.FindByID(id)
+	if err != nil {
+		api.NewErrorsResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+	ctx.JSON(http.StatusOK, candidate)
+}
+
+// @Tags 	 	Администратор
 // @Summary  	Обновить предмет
 // @Security 	ApiKeyAuth
 // @Accept 	 	json
 // @Produce  	json
-// @Param  	 	subjectId path string true "Индефикатор предмета"
 // @Param  	 	request body dto.UpdateSubjectDTO true " "
 // @Success  	200 {object} api.Response
 // @Failure	 	400,401,404 {object}  api.ResponseError
-// @Router 		/admin/subject/{subjectId} [patch]
+// @Param  	 	id path string true "Индефикатор предмета"
+// @Router 		/admin/subject/{id} [patch]
 func (d DeliveryHttpAdmin) handlerSubjectUpdateByID(ctx *gin.Context) {
-	id := ctx.Param("subjectId")
+	id := ctx.Param("id")
 	body, err := api.ParseAndValidateJSON[dto.UpdateSubjectDTO](ctx)
 	if err != nil {
 		api.NewErrorsResponse(ctx, http.StatusBadRequest, err.Error())
@@ -77,12 +96,12 @@ func (d DeliveryHttpAdmin) handlerSubjectUpdateByID(ctx *gin.Context) {
 // @Security 	ApiKeyAuth
 // @Accept 	 	json
 // @Produce  	json
-// @Param  	 	subjectId path string true "Индефикатор предмета"
 // @Success  	200 {object} api.Response
 // @Failure 	400,401,404 {object}  api.ResponseError
-// @Router 		/admin/subject/{subjectId} [delete]
+// @Param  	 	id path string true "Индефикатор предмета"
+// @Router 		/admin/subject/{id} [delete]
 func (d DeliveryHttpAdmin) handlerSubjectDelete(ctx *gin.Context) {
-	id := ctx.Param("subjectId")
+	id := ctx.Param("id")
 	err := d.subjectUC.Delete(id)
 	if err != nil {
 		api.NewErrorsResponse(ctx, http.StatusBadRequest, err.Error())

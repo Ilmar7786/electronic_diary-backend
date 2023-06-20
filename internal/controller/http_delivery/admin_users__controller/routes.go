@@ -1,4 +1,4 @@
-package adminController
+package adminUsersController
 
 import (
 	"electronic_diary/internal/domain/user"
@@ -30,7 +30,8 @@ func Register(router *gin.RouterGroup, auth authService.Service, userUC user.Use
 	{
 		users.POST("/", deliveryHttp.handlerUserCreate)
 		users.GET("/", deliveryHttp.handlerUserFindAll)
-		users.PATCH("/:userId", deliveryHttp.handlerUserUpdateByID)
-		users.DELETE("/:userId", deliveryHttp.handlerUserDelete)
+		users.GET("/:id", deliveryHttp.handlerUserFindById)
+		users.PATCH("/:id", deliveryHttp.handlerUserUpdateByID)
+		users.DELETE("/:id", deliveryHttp.handlerUserDelete)
 	}
 }
