@@ -26,7 +26,7 @@ func Register(router *gin.RouterGroup, auth authService.Service, subjectUC subje
 	}
 
 	prefix.Use(auth.Middleware(&authService.MiddlewareOptions{IsAdmin: true}))
-	subjects := prefix.Group("subjects")
+	subjects := prefix.Group("subject")
 	{
 		subjects.POST("/", deliveryHttp.handlerSubjectCreate)
 		subjects.GET("/", deliveryHttp.handlerSubjectFindAll)

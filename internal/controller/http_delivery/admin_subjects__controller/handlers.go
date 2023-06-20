@@ -17,7 +17,7 @@ import (
 // @Param	 	request body dto.CreateSubjectDTO true " "
 // @Success  	200 {object} subject.Model
 // @Failure  	400,401 {object} api.ResponseError
-// @Router 		/admin/subjects [post]
+// @Router 		/admin/subject [post]
 func (d DeliveryHttpAdmin) handlerSubjectCreate(ctx *gin.Context) {
 	body, err := api.ParseAndValidateJSON[dto.CreateSubjectDTO](ctx)
 	if err != nil {
@@ -40,7 +40,7 @@ func (d DeliveryHttpAdmin) handlerSubjectCreate(ctx *gin.Context) {
 // @Produce  	json
 // @Success  	200 {object} []subject.Model
 // @Failure	 	400,401,404 {object} api.ResponseError
-// @Router 		/admin/subjects [get]
+// @Router 		/admin/subject [get]
 func (d DeliveryHttpAdmin) handlerSubjectFindAll(ctx *gin.Context) {
 	subjects := d.subjectUC.FindAll()
 	ctx.JSON(http.StatusOK, subjects)
@@ -55,7 +55,7 @@ func (d DeliveryHttpAdmin) handlerSubjectFindAll(ctx *gin.Context) {
 // @Param  	 	request body dto.UpdateSubjectDTO true " "
 // @Success  	200 {object} api.Response
 // @Failure	 	400,401,404 {object}  api.ResponseError
-// @Router 		/admin/subjects/{subjectId} [patch]
+// @Router 		/admin/subject/{subjectId} [patch]
 func (d DeliveryHttpAdmin) handlerSubjectUpdateByID(ctx *gin.Context) {
 	id := ctx.Param("subjectId")
 	body, err := api.ParseAndValidateJSON[dto.UpdateSubjectDTO](ctx)
@@ -80,7 +80,7 @@ func (d DeliveryHttpAdmin) handlerSubjectUpdateByID(ctx *gin.Context) {
 // @Param  	 	subjectId path string true "Индефикатор предмета"
 // @Success  	200 {object} api.Response
 // @Failure 	400,401,404 {object}  api.ResponseError
-// @Router 		/admin/subjects/{subjectId} [delete]
+// @Router 		/admin/subject/{subjectId} [delete]
 func (d DeliveryHttpAdmin) handlerSubjectDelete(ctx *gin.Context) {
 	id := ctx.Param("subjectId")
 	err := d.subjectUC.Delete(id)

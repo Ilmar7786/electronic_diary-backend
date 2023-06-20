@@ -200,7 +200,7 @@ definitions:
 info:
   contact: {}
 paths:
-  /admin/subjects:
+  /admin/subject:
     get:
       consumes:
       - application/json
@@ -260,7 +260,7 @@ paths:
       summary: Создать предмет
       tags:
       - Администратор
-  /admin/subjects/{subjectId}:
+  /admin/subject/{subjectId}:
     delete:
       consumes:
       - application/json

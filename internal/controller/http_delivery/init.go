@@ -1,9 +1,9 @@
 package http_delivery
 
 import (
-	adminController "electronic_diary/internal/controller/http_delivery/admin_controller"
+	subjectController "electronic_diary/internal/controller/http_delivery/admin_subjects__controller"
+	adminController "electronic_diary/internal/controller/http_delivery/admin_users__controller"
 	"electronic_diary/internal/controller/http_delivery/auth_controller"
-	subjectController "electronic_diary/internal/controller/http_delivery/subjects"
 	userController "electronic_diary/internal/controller/http_delivery/user_controller"
 	"electronic_diary/internal/domain/subject"
 	"electronic_diary/internal/domain/user"

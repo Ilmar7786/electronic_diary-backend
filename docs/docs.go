@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/admin/subjects": {
+        "/admin/subject": {
             "get": {
                 "security": [
                     {
@@ -111,7 +111,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/subjects/{subjectId}": {
+        "/admin/subject/{subjectId}": {
             "delete": {
                 "security": [
                     {

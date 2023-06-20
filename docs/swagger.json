@@ -4,7 +4,7 @@
         "contact": {}
     },
     "paths": {
-        "/admin/subjects": {
+        "/admin/subject": {
             "get": {
                 "security": [
                     {
@@ -100,7 +100,7 @@
                 }
             }
         },
-        "/admin/subjects/{subjectId}": {
+        "/admin/subject/{subjectId}": {
             "delete": {
                 "security": [
                     {

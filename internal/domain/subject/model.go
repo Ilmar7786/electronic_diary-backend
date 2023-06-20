@@ -15,7 +15,7 @@ type Model struct {
 }
 
 func (m *Model) TableName() string {
-	return "subjects"
+	return "admin_subjects__controller"
 }
 
 func (m *Model) BeforeCreate(ctx *gorm.DB) (err error) {
