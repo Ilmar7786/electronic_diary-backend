@@ -1,7 +1,11 @@
 package auth
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/base64"
 	"errors"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -80,4 +84,24 @@ func parseToken(c *gin.Context, privateKey string) (PayloadToken, error) {
 	}
 
 	return approveType, nil
+}
+
+func getTokenHash(tokenString, privateKey string) (string, error) {
+	// Преобразуйте токен в байтовый массив
+	tokenBytes := []byte(tokenString)
+
+	// Создайте хеш-функцию SHA256
+	hasher := hmac.New(sha256.New, []byte(privateKey))
+
+	// Вычислите хеш токена
+	_, err := hasher.Write(tokenBytes)
+	if err != nil {
+		return "", fmt.Errorf("calculate hash: %w", err)
+	}
+	hash := hasher.Sum(nil)
+
+	// Кодируйте хеш в base64
+	hashBase64 := base64.StdEncoding.EncodeToString(hash)
+
+	return hashBase64, nil
 }

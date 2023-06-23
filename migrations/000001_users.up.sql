@@ -12,8 +12,8 @@ create table public.users
     "email"         varchar(50)           not null unique,
     "password"      TEXT                  not null,
     "role"          role_enum             not null,
-    "is_active"     boolean default FALSE not null,
-    "is_super_user" boolean default FALSE not null,
+    "is_active"     boolean default false not null,
+    "is_super_user" boolean default false not null,
     "created_at"    timestamp,
     "updated_at"    timestamp
 );

@@ -54,7 +54,7 @@ func NewApp(cfg *config.Config) *App {
 	subjectUC := SubjectUC.New(pgClient)
 
 	// Services
-	authService := auth.New(userUC, cfg.App)
+	authService := auth.New(userUC, cfg.App, pgClient)
 
 	router := gin.New()
 

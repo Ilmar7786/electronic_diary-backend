@@ -4,4 +4,4 @@ create table public.subjects
     "title"      varchar(40) not null unique,
     "created_at" timestamp,
     "updated_at" timestamp
-)
+);
