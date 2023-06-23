@@ -70,7 +70,7 @@ func (a Auth) RefreshToken(token string) (*Tokens, error) {
 		return nil, err
 	}
 
-	isValidateRefresh := a.db.Find(&Model{Hash: refreshHash})
+	isValidateRefresh := a.db.Where(&Model{Hash: refreshHash}).Find(&Model{})
 	if isValidateRefresh.RowsAffected == 0 {
 		return nil, errors.New("not a valid token")
 	}
