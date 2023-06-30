@@ -45,6 +45,8 @@ func (a *App) setupHTTP() {
 		AuthService: a.authService,
 		SubjectUC:   a.subjectUC,
 		ParentUC:    a.parentUC,
+		TeacherUC:   a.teacherUC,
+		StudentUC:   a.studentUC,
 	})
 
 	if err := a.router.Run(addr); err != nil {
