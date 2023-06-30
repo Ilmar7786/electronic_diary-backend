@@ -1,1 +1,1 @@
-drop table if exists public.teachers;
+drop table if exists public.teachers_subjects;

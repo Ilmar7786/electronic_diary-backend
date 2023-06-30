@@ -6,7 +6,7 @@ create table if not exists public.teachers
     "updated_at" timestamp
 );
 
-create table if not exists public.teachers (
+create table if not exists public.teachers_subjects (
     teacher_id uuid references public.teachers(id),
     subject_id uuid references public.subjects(id),
     primary key (teacher_id, subject_id)

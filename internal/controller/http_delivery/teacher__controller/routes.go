@@ -1,6 +1,8 @@
 package teacherController
 
 import (
+	"fmt"
+
 	"electronic_diary/internal/domain/teacher"
 
 	"github.com/gin-gonic/gin"
@@ -22,6 +24,5 @@ func Register(router *gin.RouterGroup, teacherUC teacher.UseCase) {
 		teacherUC: teacherUC,
 	}
 
-	print(prefix)
-	print(deliveryHttp)
+	fmt.Println(prefix, deliveryHttp)
 }
