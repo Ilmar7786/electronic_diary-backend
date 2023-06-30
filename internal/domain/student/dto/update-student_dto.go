@@ -12,7 +12,7 @@ type UpdateStudentDTO struct {
 	ResidentialAddress *string            `json:"residentialAddress"`
 	UserID             *uuid.UUID         `json:"userId"`
 	ParentID           *uuid.UUID         `json:"parentId"`
-	User               *dto.CreateUserDTO `json:"user"`
+	User               *dto.UpdateUserDTO `json:"user"`
 }
 
 func (c UpdateStudentDTO) Validate() error {
