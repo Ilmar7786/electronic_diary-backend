@@ -42,13 +42,4 @@ func Register(
 		subjects.PATCH("/:id", deliveryHttp.handlerSubjectUpdateByID)
 		subjects.DELETE("/:id", deliveryHttp.handlerSubjectDelete)
 	}
-
-	users := prefix.Group("users")
-	{
-		users.POST("/", deliveryHttp.handlerUserCreate)
-		users.GET("/", deliveryHttp.handlerUserFindAll)
-		users.GET("/:id", deliveryHttp.handlerUserFindById)
-		users.PATCH("/:id", deliveryHttp.handlerUserUpdateByID)
-		users.DELETE("/:id", deliveryHttp.handlerUserDelete)
-	}
 }

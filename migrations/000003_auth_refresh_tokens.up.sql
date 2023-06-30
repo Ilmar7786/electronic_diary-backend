@@ -1,4 +1,4 @@
-create table public.auth_refresh_tokens
+create table if not exists public.auth_refresh_tokens
 (
     "id"         uuid default gen_random_uuid() primary key,
     "hash"       varchar not null unique,

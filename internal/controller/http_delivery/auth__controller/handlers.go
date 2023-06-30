@@ -24,7 +24,7 @@ func (d DeliveryHttpAuth) handlerSignIn(ctx *gin.Context) {
 		return
 	}
 
-	user, err := d.AuthService.SignIn(body)
+	user, err := d.authService.SignIn(body)
 	if err != nil {
 		api.NewErrorsResponse(ctx, http.StatusBadRequest, err.Error())
 		return
@@ -48,11 +48,25 @@ func (d DeliveryHttpAuth) handlerRefresh(ctx *gin.Context) {
 		return
 	}
 
-	user, err := d.AuthService.RefreshToken(body.Token)
+	user, err := d.authService.RefreshToken(body.Token)
 	if err != nil {
 		api.NewErrorsResponse(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
+
+	ctx.JSON(http.StatusOK, user)
+}
+
+// @Tags 	Аунтификация
+// @Summary Информация о пользователи
+// @Security ApiKeyAuth
+// @Accept 	json
+// @Produce json
+// @Success 200 {object} user.Model
+// @Failure 400 {object} api.ResponseErrors
+// @Router /auth/user-info [get]
+func (d DeliveryHttpAuth) handlerUserInfo(ctx *gin.Context) {
+	user := d.authService.GetUser(ctx)
 
 	ctx.JSON(http.StatusOK, user)
 }

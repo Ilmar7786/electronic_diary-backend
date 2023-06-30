@@ -1,7 +1,7 @@
 create type public.role_enum as enum ('teacher', 'parent', 'student');
 create extension if not exists "pgcrypto";
 
-create table public.users
+create table if not exists public.users
 (
     "id"            uuid    default gen_random_uuid() primary key,
     "surname"       varchar(40)           not null,

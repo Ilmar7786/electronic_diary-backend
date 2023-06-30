@@ -53,6 +53,7 @@ func (u User) FindByID(id string) (*user.Model, error) {
 
 	return &candidate, nil
 }
+
 func (u User) FindByEmail(email string) (*user.Model, error) {
 	var candidate *user.Model
 	err := u.db.Where("email = ?", email).First(&candidate).Error

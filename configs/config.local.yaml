@@ -9,7 +9,7 @@ app:
     refresh-token-expired-in-not-remember: 60m
 
 http:
-  host: 0.0.0.0
+  host: 127.0.0.1
   port: 8080
   prefixApi: 'api'
   proxy: [ ]
