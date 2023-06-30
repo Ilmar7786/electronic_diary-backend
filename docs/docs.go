@@ -177,7 +177,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Индефикатор предмета",
+                        "description": "Индефикатор преподавателя",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -239,6 +239,263 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Индефикатор предмета",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/teachers": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Администратор"
+                ],
+                "summary": "Список преподователей",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/teacher.Model"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Администратор"
+                ],
+                "summary": "Создать преподователя",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateTeacherDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/teacher.Model"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/teachers/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Администратор"
+                ],
+                "summary": "Получить преподователя",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Индефикатор преподавателя",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/teacher.Model"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Администратор"
+                ],
+                "summary": "Удалить преподавателя",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Индефикатор преподавателя",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseError"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Администратор"
+                ],
+                "summary": "Обновить прподавателя",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateTeacherDTO"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Индефикатор преподавателя",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -470,7 +727,7 @@ const docTemplate = `{
                 "tags": [
                     "Предметы"
                 ],
-                "summary": "Список предметов",
+                "summary": "Получить предмет",
                 "parameters": [
                     {
                         "type": "string",
@@ -587,6 +844,20 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.CreateTeacherDTO": {
+            "type": "object",
+            "properties": {
+                "subject": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/subject.Model"
+                    }
+                },
+                "user": {
+                    "$ref": "#/definitions/dto.CreateUserDTO"
+                }
+            }
+        },
         "dto.CreateUserDTO": {
             "type": "object",
             "required": [
@@ -693,6 +964,77 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.UpdateTeacherDTO": {
+            "type": "object",
+            "properties": {
+                "subject": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/subject.Model"
+                    }
+                },
+                "user": {
+                    "$ref": "#/definitions/dto.UpdateUserDTO"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UpdateUserDTO": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "email": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "isActive": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "isSuperUser": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 40
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 30,
+                    "minLength": 8
+                },
+                "patronymic": {
+                    "type": "string",
+                    "maxLength": 40
+                },
+                "phone": {
+                    "type": "string",
+                    "maxLength": 30
+                },
+                "role": {
+                    "enum": [
+                        "student",
+                        "teacher",
+                        "parent"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/constants.Role"
+                        }
+                    ]
+                },
+                "surname": {
+                    "type": "string",
+                    "maxLength": 40
+                }
+            }
+        },
         "parent.Model": {
             "type": "object",
             "properties": {
@@ -729,6 +1071,32 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "teacher.Model": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "subject": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/subject.Model"
+                    }
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/user.Model"
+                },
+                "userId": {
                     "type": "string"
                 }
             }

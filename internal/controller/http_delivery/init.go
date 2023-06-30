@@ -27,7 +27,7 @@ type Options struct {
 }
 
 func Register(router *gin.RouterGroup, opt Options) {
-	adminController.Register(router, opt.AuthService, opt.SubjectUC, opt.UserUC)
+	adminController.Register(router, opt.AuthService, opt.SubjectUC, opt.UserUC, opt.TeacherUC)
 	authController.Register(router, opt.AuthService)
 	subjectsController.Register(router, opt.SubjectUC)
 	parentController.Register(router, opt.ParentUC)

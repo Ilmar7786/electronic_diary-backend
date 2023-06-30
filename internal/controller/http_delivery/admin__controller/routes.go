@@ -2,6 +2,7 @@ package adminController
 
 import (
 	"electronic_diary/internal/domain/subject"
+	"electronic_diary/internal/domain/teacher"
 	"electronic_diary/internal/domain/user"
 	authService "electronic_diary/internal/services/auth"
 
@@ -16,6 +17,7 @@ type DeliveryHttpAdmin struct {
 
 	subjectUC subject.UseCase
 	userUC    user.UseCase
+	teacherUC teacher.UseCase
 }
 
 func Register(
@@ -23,6 +25,7 @@ func Register(
 	auth authService.Service,
 	subjectUC subject.UseCase,
 	userUC user.UseCase,
+	teacherUC teacher.UseCase,
 ) {
 	prefix := router.Group(pathUrlAPI)
 
@@ -31,6 +34,7 @@ func Register(
 		authService: auth,
 		subjectUC:   subjectUC,
 		userUC:      userUC,
+		teacherUC:   teacherUC,
 	}
 
 	prefix.Use(auth.Middleware(&authService.MiddlewareOptions{IsAdmin: true}))
@@ -41,5 +45,14 @@ func Register(
 		subjects.GET("/:id", deliveryHttp.handlerSubjectById)
 		subjects.PATCH("/:id", deliveryHttp.handlerSubjectUpdateByID)
 		subjects.DELETE("/:id", deliveryHttp.handlerSubjectDelete)
+	}
+
+	teachers := prefix.Group("teachers")
+	{
+		teachers.POST("/", deliveryHttp.handlerTeacherCreate)
+		teachers.GET("/", deliveryHttp.handlerTeacherFindAll)
+		teachers.GET("/:id", deliveryHttp.handlerTeacherById)
+		teachers.PATCH("/:id", deliveryHttp.handlerTeacherUpdateByID)
+		teachers.DELETE("/:id", deliveryHttp.handlerTeacherDelete)
 	}
 }

@@ -52,6 +52,15 @@ definitions:
     required:
     - title
     type: object
+  dto.CreateTeacherDTO:
+    properties:
+      subject:
+        items:
+          $ref: '#/definitions/subject.Model'
+        type: array
+      user:
+        $ref: '#/definitions/dto.CreateUserDTO'
+    type: object
   dto.CreateUserDTO:
     properties:
       address:
@@ -128,6 +137,55 @@ definitions:
         maxLength: 40
         type: string
     type: object
+  dto.UpdateTeacherDTO:
+    properties:
+      subject:
+        items:
+          $ref: '#/definitions/subject.Model'
+        type: array
+      user:
+        $ref: '#/definitions/dto.UpdateUserDTO'
+      userId:
+        type: string
+    type: object
+  dto.UpdateUserDTO:
+    properties:
+      address:
+        maxLength: 255
+        type: string
+      email:
+        maxLength: 100
+        type: string
+      isActive:
+        default: false
+        type: boolean
+      isSuperUser:
+        default: false
+        type: boolean
+      name:
+        maxLength: 40
+        type: string
+      password:
+        maxLength: 30
+        minLength: 8
+        type: string
+      patronymic:
+        maxLength: 40
+        type: string
+      phone:
+        maxLength: 30
+        type: string
+      role:
+        allOf:
+        - $ref: '#/definitions/constants.Role'
+        enum:
+        - student
+        - teacher
+        - parent
+      surname:
+        maxLength: 40
+        type: string
+    type: object
   parent.Model:
     properties:
       createdAt:
@@ -152,6 +210,23 @@ definitions:
       title:
         type: string
       updatedAt:
+        type: string
+    type: object
+  teacher.Model:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      subject:
+        items:
+          $ref: '#/definitions/subject.Model'
+        type: array
+      updatedAt:
+        type: string
+      user:
+        $ref: '#/definitions/user.Model'
+      userId:
         type: string
     type: object
   user.Model:
@@ -245,7 +320,7 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: Индефикатор предмета
+      - description: Индефикатор преподавателя
         in: path
         name: id
         required: true
@@ -344,6 +419,168 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Обновить предмет
+      tags:
+      - Администратор
+  /admin/teachers:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/teacher.Model'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Список преподователей
+      tags:
+      - Администратор
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateTeacherDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/teacher.Model'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Создать преподователя
+      tags:
+      - Администратор
+  /admin/teachers/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Индефикатор преподавателя
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Удалить преподавателя
+      tags:
+      - Администратор
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Индефикатор преподавателя
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/teacher.Model'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Получить преподователя
+      tags:
+      - Администратор
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: ' '
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateTeacherDTO'
+      - description: Индефикатор преподавателя
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Обновить прподавателя
       tags:
       - Администратор
   /auth/refresh:
@@ -492,7 +729,7 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/api.ResponseError'
-      summary: Список предметов
+      summary: Получить предмет
       tags:
       - Предметы
 securityDefinitions:

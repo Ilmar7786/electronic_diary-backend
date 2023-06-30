@@ -20,7 +20,7 @@ func (d DeliveryHttp) handlerSubjectFindAll(ctx *gin.Context) {
 }
 
 // @Tags 	 	Предметы
-// @Summary  	Список предметов
+// @Summary  	Получить предмет
 // @Accept 	 	json
 // @Produce  	json
 // @Success  	200 {object} []subject.Model
