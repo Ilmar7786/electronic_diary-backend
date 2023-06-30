@@ -1,20 +1,12 @@
 FROM golang:alpine as builder
-WORKDIR /app
-
-RUN apk add make
+WORKDIR /build
 
 COPY go.mod .
 COPY go.sum .
-RUN go mod download
+RUN  go mod download
 
+RUN apk add make
 COPY . .
-
 RUN make build
 
-FROM alpine:latest
-WORKDIR /app
-
-COPY --from=builder /build/app .
-COPY --from=builder /app/.env .
-
-ENTRYPOINT ["./app"]
+ENTRYPOINT ["./build/app -config configs/config.prod.yaml"]
