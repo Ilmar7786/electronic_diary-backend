@@ -9,4 +9,4 @@ RUN apk add make
 COPY . .
 RUN make build
 
-ENTRYPOINT ["./build/app -config configs/config.prod.yaml"]
+ENTRYPOINT ["./build/app"]
