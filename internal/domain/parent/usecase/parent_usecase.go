@@ -22,6 +22,10 @@ func New(db *gorm.DB, userUC user.UseCase) parent.UseCase {
 }
 
 func (p Parent) Create(dto dto.CreateParentDTO) (*parent.Model, error) {
+	if err := dto.Validate(); err != nil {
+		return nil, err
+	}
+
 	newUser, err := p.userUC.Create(dto.User)
 	if err != nil {
 		return nil, err

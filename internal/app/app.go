@@ -5,6 +5,8 @@ import (
 
 	"electronic_diary/internal/domain/parent"
 	ParentUC "electronic_diary/internal/domain/parent/usecase"
+	"electronic_diary/internal/domain/student"
+	StudentUC "electronic_diary/internal/domain/student/usecase"
 	"electronic_diary/internal/domain/subject"
 	SubjectUC "electronic_diary/internal/domain/subject/usecase"
 	"electronic_diary/internal/domain/user"
@@ -27,6 +29,7 @@ type App struct {
 	userUC    user.UseCase
 	subjectUC subject.UseCase
 	parentUC  parent.UseCase
+	studentUC student.UseCase
 
 	authService auth.Service
 	mail        *mailer.Mailer
@@ -56,6 +59,7 @@ func NewApp(cfg *config.Config) *App {
 	userUC := UserUC.New(pgClient)
 	subjectUC := SubjectUC.New(pgClient)
 	parentUC := ParentUC.New(pgClient, userUC)
+	studentUC := StudentUC.New(pgClient, userUC)
 
 	// Services
 	authService := auth.New(userUC, cfg.App, pgClient)
@@ -70,6 +74,7 @@ func NewApp(cfg *config.Config) *App {
 		userUC:    userUC,
 		subjectUC: subjectUC,
 		parentUC:  parentUC,
+		studentUC: studentUC,
 
 		authService: authService,
 		mail:        mail,
