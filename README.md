@@ -27,11 +27,12 @@
     PG_ADMIN_PASSWORD="admin"
 
 ## Запуск
-**Локально**:
+**Local development**:
 1. Установка CLI Migrate: `go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest`
 2. Применить миграции: `make migration up`
 3. Создания супер пользователя: `make create-admin`
 4. Запуск сервера: `make run`
 
 
-**Docker**: `make docker-up`
+**Production with Docker**: 
+1. `make docker-up`
