@@ -19,7 +19,6 @@ func (a *App) setupHTTP() {
 	if a.cfg.App.Debug {
 		docs.SwaggerInfo.Title = a.cfg.Swagger.Title
 		docs.SwaggerInfo.Version = a.cfg.Swagger.Version
-		docs.SwaggerInfo.Host = addr
 		docs.SwaggerInfo.BasePath = "/" + a.cfg.HTTP.PrefixAPI
 		docs.SwaggerInfo.Schemes = a.cfg.Swagger.Schemes
 		public.GET(fmt.Sprintf("/%s/*any", a.cfg.Swagger.Path), ginSwagger.WrapHandler(swaggerFiles.Handler))
