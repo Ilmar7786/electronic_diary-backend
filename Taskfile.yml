@@ -1,0 +1,66 @@
+version: "3"
+
+dotenv: [".env"]
+
+env:
+  APP_PATH: cmd/app/main.go
+  APP_BIN: build/app
+  DATABASE_URL: postgresql://{{.PSQL_USER}}:{{.PSQL_PASSWORD}}@{{.PSQL_HOST}}:{{.PSQL_PORT}}/{{.PSQL_DATABASE}}?sslmode=disable
+
+tasks:
+  default:
+    cmds:
+      - task: install
+
+  install:
+    desc: installing basic packages and utilities
+    cmds:
+      - go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+      - go mod tidy
+
+  dev:install:
+    desc: installing development utilities
+    cmds:
+      - task: install
+      - go install github.com/cosmtrek/air@latest
+
+  dev:
+    desc: starting the server in dev mode (hot reload)
+    cmds:
+      - air -c .air.toml -- {{.CLI_ARGS}}
+
+  run:
+    desc: starting main go file
+    cmds:
+      - go run $APP_PATH {{.CLI_ARGS}}
+
+  lint:
+    desc: linting full app
+    cmds:
+      - golangci-lint run
+
+  build:
+    desc: building the application into a binary file
+    cmds:
+      - task: pre-build
+      - go build -o $APP_BIN $APP_PATH
+
+  swagger:
+    desc: generate swagger documentation
+    cmds:
+      - swag init -g ./cmd/app/main.go -o ./docs
+
+  create-admin:
+    desc: creating an administrative user
+    prompt: Are you sure you want to create a super user?
+    cmds:
+      - go run ./cmd/create-admin/main.go
+
+  migration:
+    cmds:
+      - migrate -source file://migrations -database $DATABASE_URL {{.CLI_ARGS}}
+
+  pre-build:
+    desc: clearing the build folder
+    cmds:
+      - rm -rf ./build || true
